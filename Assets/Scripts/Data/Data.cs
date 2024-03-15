@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Movement
 {
-    MovementType type;
-    MovementRecord record;
+    public MovementType type;
+    public MovementRecord record;
+    bool hasRecord = false;
 }
 
 public class WOD
 {
-    WODType type;
+    public WODType type;
 }
 
 public struct MovementRecord
