@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using TMPro.EditorUtilities;
 
 public class UIPageController : UIController
 {
@@ -14,7 +15,7 @@ public class UIPageController : UIController
     private void OnDestroy() { Reset(); }
     #endregion
 
-    #region MyRegion
+    #region Methods
     public bool IsPageAvailable(string pageID)
     {
         return pageDic.ContainsKey(pageID);
@@ -34,7 +35,20 @@ public class UIPageController : UIController
         throw new NullReferenceException("That page is unavailable.");
     }
 
-    //public virtual UIPage Openpage(string pageID, pageOno)
+    public virtual UIPage OpenPage(string pageID/*, PageOpenMode openMode*/)
+    {
+        var pageToOpen = GetPage(pageID);
+        pageToOpen.Open();
+        //pageToOpen.Open(openMode);
+
+        return pageToOpen;
+    }
+
+    public virtual void ClosePage(string pageID)
+    {
+        var pateToClose = GetPage(pageID);
+        pateToClose.Close();
+    }
     #endregion
 
     #region UIController
@@ -69,4 +83,29 @@ public class UIPageController : UIController
         pageDic.Clear();
     }
     #endregion
+}
+
+public class UIPageTypeController : UIPageController
+{
+    public virtual UIPage OpenPage(PageType type)
+    {
+        return OpenPage(type.ToString());
+    }
+
+    public virtual void ClosePage(PageType type)
+    {
+        ClosePage(type.ToString());
+    }
+
+    protected override void Init()
+    {
+        base.Init();
+        //UIManager.Instance.RegistterPageController(this);
+    }
+
+    public override void Reset()
+    {
+        //UIManager.Instance.UnRegisterPageController(this);
+        base.Reset();
+    }
 }
