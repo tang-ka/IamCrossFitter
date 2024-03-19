@@ -18,7 +18,7 @@ public class UIPanel : UIBase
         Init();
     }
 
-    public override void Init()
+    protected override void Init()
     {
         typeID = gameObject.name.Split('_')[1];
         IsInit = true;

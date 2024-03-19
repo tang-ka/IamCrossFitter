@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class UIPage : UIBase
 {
+    public PageType pageType => (PageType)Enum.Parse(typeof(PageType), typeID);
     protected List<UIPanel> panelList = new List<UIPanel>();
     protected UIPageController parentController;
 
@@ -13,7 +14,7 @@ public class UIPage : UIBase
 
     private void OnDestroy() { Reset(); }
 
-    public override void Init()
+    protected override void Init()
     {
         foreach (var panel in GetComponentsInChildren<UIPanel>(true))
         {

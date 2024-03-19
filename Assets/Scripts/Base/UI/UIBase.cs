@@ -10,7 +10,7 @@ public abstract class UIBase : MonoBehaviour
 
     public bool IsInit { get; protected set; }
 
-    public abstract void Init();
+    protected abstract void Init();
     public abstract void Reset();
     public abstract void Activate(bool isActive);
 }
