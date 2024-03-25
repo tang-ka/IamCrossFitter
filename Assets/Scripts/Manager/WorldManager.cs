@@ -14,7 +14,7 @@ public enum MainState
     PersonalRecord
 }
 
-public class WorldManager : SingletonMonoBehaviour<WorldManager>, IStateSubject<MainState>
+public class WorldManager : ManagerWithState<WorldManager, MainState>
 {
     SceneHandler sceneHandler = new SceneHandler(
         new Dictionary<MainState, string>()
@@ -24,12 +24,9 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager>, IStateSubject<
             { MainState.PersonalRecord, "PersonalRecordScene" }
         });
 
-    List<IStateObserver<MainState>> observers = new List<IStateObserver<MainState>>();
-
-    [SerializeField] MainState curState = MainState.None;
     [SerializeField] Stack<MainState> stateStack = new Stack<MainState>();
 
-    public MainState CurMainState
+    public override MainState CurMainState
     {
         get => curState;
         set
@@ -40,47 +37,30 @@ public class WorldManager : SingletonMonoBehaviour<WorldManager>, IStateSubject<
                 stateStack.Push(curState);
             
             curState = value;
+
             SetSceneToState(value);
         }
     }
 
-    private async void SetSceneToState(MainState value)
-    {
-        await sceneHandler.LoadScene(value, LoadSceneMode.Additive);
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-        Init();
-    }
-
-    public void Init()
-    {
-        CurMainState = MainState.Loading;
-    }
-
     public MainState PreMainState => stateStack.Peek();
 
-    public void ReturnToPrestate()
+    private async void SetSceneToState(MainState value)
+    {
+        await sceneHandler.LoadScene(value, LoadSceneMode.Additive, 
+            finishCallback: () =>
+            {
+                NotifyChangeState(value);
+            });
+    }
+
+    public override void Init()
+    {
+        CurMainState = MainState.Loading;
+        base.Init();
+    }
+
+    public override void ReturnToPreState()
     {
         CurMainState = stateStack.Pop();
-    }
-
-    public void AddObserver(IStateObserver<MainState> observer)
-    {
-        if (!observers.Contains(observer))
-            observers.Add(observer);
-    }
-
-    public void RemoveObserver(IStateObserver<MainState> observer)
-    {
-        observers.Remove(observer);
-    }
-
-    public void NotifyChangeStat(MainState state)
-    {
-        foreach (var observer in observers)
-            observer.Notify(state);
     }
 }

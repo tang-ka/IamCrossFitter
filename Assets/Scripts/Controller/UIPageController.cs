@@ -35,11 +35,10 @@ public class UIPageController : UIController
         throw new NullReferenceException("That page is unavailable.");
     }
 
-    public virtual UIPage OpenPage(string pageID/*, PageOpenMode openMode*/)
+    public virtual UIPage OpenPage(string pageID)
     {
         var pageToOpen = GetPage(pageID);
         pageToOpen.Open();
-        //pageToOpen.Open(openMode);
 
         return pageToOpen;
     }

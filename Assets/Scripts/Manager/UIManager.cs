@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public enum PageType
     SystemUI, Setting,
 
     // Loading Scene
-
+    Loading
 
     // Main Scene
 
@@ -16,17 +17,115 @@ public enum PageType
     // PersonalRecord Scene
 }
 
-public class UIManager : SingletonMonoBehaviour<UIManager>
+public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
 {
-    // Start is called before the first frame update
-    void Start()
+    // UIPageTypeController를 관리하고 싶다.
+    List<UIPageTypeController> pageControllers = new List<UIPageTypeController>();
+
+    UIPage curPage;
+    UIPage prePage;
+
+    List<UIPage> curOpenedPages = new List<UIPage>();
+
+    public override void Init()
+    {
+        WorldManager.Instance.AddObserver(this);
+        base.Init();
+    }
+
+    public override void Reset()
+    {
+        WorldManager.Instance.RemoveObserver(this);
+        base.Reset();
+    }
+
+    #region Utility
+    /// <summary>
+    /// Utility : Set visibility for all UI(PageController)
+    /// </summary>
+    /// <param name="visible"></param>
+    public void SetUIVisibility(bool visible)
+    {
+        pageControllers.ForEach((controller) =>
+        {
+            controller.SetVisible(visible);
+        });
+    }
+
+    /// <summary>
+    /// Utility : Get page with page's name
+    /// </summary>
+    /// <param name="pageName"></param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    public UIPage GetPage(string pageName)
+    {
+        foreach (var controller in pageControllers)
+            return controller.GetPage(pageName);
+
+        throw new NullReferenceException($"There is no page with {pageName}'s name. Please check the page name again.");
+    }
+    #endregion
+
+    public void OpenPage(PageType page)
+    {
+        var pageController = pageControllers.Find((controller) => controller.IsPageAvailable(page.ToString()));
+
+        if (pageController != null)
+        {
+            if (curOpenedPages.Contains(pageController.GetPage(page.ToString())))
+                return;
+
+            Debug.Log($"Open page : {page}");
+
+            if (curPage != null)
+            {
+                prePage = curPage;
+            }
+
+            curPage = pageController.OpenPage(page);
+            curOpenedPages.Add(curPage);
+        }
+    }
+
+    public void CloseCurPage()
+    {
+        if (curPage != null)
+        {
+            Debug.Log($"Close current page : {curPage.TypeID}");
+            curPage.Close();
+
+            curPage.Close();
+            curOpenedPages.Remove(curPage);
+
+            curPage = null;
+        }
+    }
+
+    public void CloseStackedPages()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CloseAllPages()
     {
         
+    }
+
+
+    public void ResisterPageController(UIPageTypeController controller)
+    {
+        if (!pageControllers.Contains(controller))
+            pageControllers.Add(controller);
+    }
+
+    public void UnregisterPagecontroller(UIPageTypeController controller)
+    {
+        pageControllers.Remove(controller);
+    }
+
+    public void Notify(MainState state)
+    {
+        throw new System.NotImplementedException();
     }
 }

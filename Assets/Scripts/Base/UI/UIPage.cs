@@ -7,7 +7,7 @@ using UnityEngine;
 public class UIPage : UIBase
 {
     public PageType pageType => (PageType)Enum.Parse(typeof(PageType), typeID);
-    protected List<UIPanel> panelList = new List<UIPanel>();
+    [SerializeField] protected List<UIPanel> panelList = new List<UIPanel>();
     protected UIPageController parentController;
 
     public float currentWidth => GetComponent<RectTransform>().rect.width;
