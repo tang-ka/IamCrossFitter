@@ -6,9 +6,8 @@ public abstract class ManagerBase<T> : SingletonMonoBehaviour<T> where T : MonoB
 {
     public bool IsInit { get; protected set; }
 
-    protected override void Awake()
+    protected virtual void Start()
     {
-        base.Awake();
         Init();
     }
 

@@ -16,7 +16,7 @@ public enum MainState
 
 public class WorldManager : ManagerWithState<WorldManager, MainState>
 {
-    SceneHandler sceneHandler = new SceneHandler(
+    public SceneHandler sceneHandler = new SceneHandler(
         new Dictionary<MainState, string>()
         {
             { MainState.Loading, "LoadingScene" },
@@ -55,7 +55,6 @@ public class WorldManager : ManagerWithState<WorldManager, MainState>
 
     public override void Init()
     {
-        CurMainState = MainState.Loading;
         base.Init();
     }
 

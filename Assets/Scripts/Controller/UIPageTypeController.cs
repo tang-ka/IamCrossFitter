@@ -17,12 +17,12 @@ public class UIPageTypeController : UIPageController
     protected override void Init()
     {
         base.Init();
-        //UIManager.Instance.RegistterPageController(this);
+        UIManager.Instance.RegisterPageController(this);
     }
 
     public override void Reset()
     {
-        //UIManager.Instance.UnRegisterPageController(this);
+        UIManager.Instance.UnregisterPageController(this);
         base.Reset();
     }
 }

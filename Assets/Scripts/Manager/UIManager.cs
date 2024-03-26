@@ -5,14 +5,16 @@ using UnityEngine;
 
 public enum PageType
 {
+    None,
+
     // Managing Scene
     SystemUI, Setting,
 
     // Loading Scene
-    Loading
+    Loading,
 
     // Main Scene
-
+    Dashboard,
 
     // PersonalRecord Scene
 }
@@ -25,7 +27,7 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     UIPage curPage;
     UIPage prePage;
 
-    List<UIPage> curOpenedPages = new List<UIPage>();
+    [SerializeField] List<UIPage> curOpenedPages = new List<UIPage>();
 
     public override void Init()
     {
@@ -113,19 +115,35 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     }
 
 
-    public void ResisterPageController(UIPageTypeController controller)
+    public void RegisterPageController(UIPageTypeController controller)
     {
         if (!pageControllers.Contains(controller))
             pageControllers.Add(controller);
     }
 
-    public void UnregisterPagecontroller(UIPageTypeController controller)
+    public void UnregisterPageController(UIPageTypeController controller)
     {
         pageControllers.Remove(controller);
     }
 
+    // Set the page to open first as the MainState changes
     public void Notify(MainState state)
     {
-        throw new System.NotImplementedException();
+        switch (state)
+        {
+            case MainState.None:
+                OpenPage(PageType.None);
+                return;
+            case MainState.Loading:
+                OpenPage(PageType.Loading);
+                return;
+            case MainState.Main:
+                OpenPage(PageType.SystemUI);
+                OpenPage(PageType.Dashboard);
+                return;
+            case MainState.PersonalRecord:
+                break;
+        }
+
     }
 }
