@@ -493,6 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267b55d61f0332744a55c6d0666b669e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curOpenedPages: []
 --- !u!1 &159697360
 GameObject:
   m_ObjectHideFlags: 0
