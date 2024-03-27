@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIPanelSystemUIBottomButton : UIPanel
+public class UIPanelSystemUIBottomButton : UIPanel_old
 {
     // Start is called before the first frame update
     void Start()

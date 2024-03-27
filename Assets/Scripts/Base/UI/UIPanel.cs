@@ -1,38 +1,61 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class UIPanel : UIBase
 {
-    protected UIPage parentPage;
+    #region Member
+    UIPage parentPage; 
+    #endregion
 
-    private Action onSetFinished;
+    #region Mono
+    private void OnDestroy() { Deinit(); }
+    #endregion
 
-    private void OnDestroy() { Reset(); }
-
-    public virtual void Init(UIPage parent)
+    #region Method : virtual
+    public virtual void Init(UIPage page)
     {
-        parentPage = parent;
+        parentPage = page;
+
         Init();
     }
 
+    public virtual void Activate()
+    {
+        Active(true);
+        Debug.Log($"Activate Panel : {typeID}");
+    }
+
+    public virtual void Deactivate()
+    {
+        Active(false);
+        Debug.Log($"Deactivate Panel : {typeID}");
+    }
+    #endregion
+
+    #region Method : override
     protected override void Init()
     {
         typeID = gameObject.name.Split('_')[1];
-        IsInit = true;
+
+        isInit = true;
     }
 
-    public override void Reset() { }
+    protected override void Deinit() { }
 
-    public override void Activate(bool isActive)
+    /// <summary>
+    /// The part that activates the panel by page
+    /// </summary>
+    /// <param name="isActive"></param>
+    protected override void Active(bool isActive)
     {
+        if (!isInit)
+            Init(GetComponentInParent<UIPage>());
+
         gameObject.SetActive(isActive);
     }
-
-    public virtual void SetPanel(Action finishCallback)
-    {
-        onSetFinished = finishCallback;
-    }
+    #endregion
 }

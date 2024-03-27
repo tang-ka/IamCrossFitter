@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
-using TMPro.EditorUtilities;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class UIPageController : UIController
 {
@@ -12,53 +11,45 @@ public class UIPageController : UIController
 
     #region Mono
     private void Awake() { Init(); }
-    private void OnDestroy() { Reset(); }
+    private void OnDestroy() { Deinit(); }
     #endregion
 
-    #region Methods
-    public bool IsPageAvailable(string pageID)
+    #region Method
+    public virtual void OpenPage(PageType pageType)
     {
-        return pageDic.ContainsKey(pageID);
+        GetPage(pageType).Open();
     }
 
-    public void SetVisible(bool isVisible)
+    public virtual void ClosePage(PageType pageType)
     {
-        GetComponent<Canvas>().enabled = isVisible;
-    }
-
-    public UIPage GetPage(string pageID)
-    {
-        if (IsPageAvailable(pageID))
-            return pageDic[pageID];
-
-        //return null;
-        throw new NullReferenceException("That page is unavailable.");
-    }
-
-    public virtual UIPage OpenPage(string pageID)
-    {
-        var pageToOpen = GetPage(pageID);
-        pageToOpen.Open();
-
-        return pageToOpen;
-    }
-
-    public virtual void ClosePage(string pageID)
-    {
-        var pateToClose = GetPage(pageID);
-        pateToClose.Close();
+        GetPage(pageType).Close();
     }
     #endregion
 
-    #region UIController
+    #region Util
+    public bool IsPageAvailable(PageType pageType)
+    {
+        return pageDic.ContainsKey(pageType.ToString());
+    }
+
+    public UIPage GetPage(PageType pageType) 
+    {
+        if (IsPageAvailable(pageType))
+            return pageDic[pageType.ToString()];
+
+        throw new NullReferenceException($"This page is unavailable in PageController - {gameObject.name}");
+    }
+    #endregion
+
+    #region Method : override
     protected override async void Init()
     {
-        IsInit = false;
+        isInit = false;
 
-        foreach (var page in GetComponentsInChildren<UIPage>(true))
+        foreach (var page in GetComponentsInChildren<UIPage>())
         {
-            page.Init(this);
             pageDic.Add(page.TypeID, page);
+            page.Init(this);
         }
 
         await UniTask.WaitUntil(() =>
@@ -71,15 +62,13 @@ public class UIPageController : UIController
             return true;
         });
 
-        IsInit = true;
+        isInit = true;
     }
 
-    public override void Reset()
+    protected override void Deinit()
     {
-        foreach (var page in pageDic.Values)
-            page.Reset();
-
         pageDic.Clear();
-    }
+        pageDic = null;
+    } 
     #endregion
 }

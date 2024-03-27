@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPanelLoading : UIPanel
+public class UIPanelLoading : UIPanel_old
 {
     [SerializeField] List<Transform> titleText = new List<Transform>();
     [SerializeField] Image imgLoadging;
