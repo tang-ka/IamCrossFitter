@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using UnityEngine;
+
 public interface IStateObserver<T> where T : System.Enum
 {
     public void Notify(T state);

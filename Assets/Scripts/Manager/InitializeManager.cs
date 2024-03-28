@@ -17,12 +17,11 @@ public class InitializeManager : ManagerBase<InitializeManager>, IStateObserver<
     float completeTime = 3;
     double timeOutSeconds = 5;
 
-    public override void Init()
+    protected override void StartSettting()
     {
-        UniTask.WaitUntil(() => WorldManager.Instance.IsInit);
+        base.StartSettting();
         WorldManager.Instance.AddObserver(this);
         WorldManager.Instance.CurMainState = MainState.Loading;
-        base.Init();
     }
 
     public async void InitializeApplication()
@@ -59,8 +58,8 @@ public class InitializeManager : ManagerBase<InitializeManager>, IStateObserver<
 
         onCompleteInitialize?.Invoke(isSuccess);
 
-        WorldManager.Instance.sceneHandler.UnloadScene(MainState.Loading);
-        WorldManager.Instance.CurMainState = MainState.Main;
+        //WorldManager.Instance.sceneHandler.UnloadScene(MainState.Loading);
+        //WorldManager.Instance.CurMainState = MainState.Main;
     }
 
     public void Notify(MainState state)

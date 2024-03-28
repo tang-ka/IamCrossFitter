@@ -39,19 +39,25 @@ public class UIPageController : UIController
 
         throw new NullReferenceException($"This page is unavailable in PageController - {gameObject.name}");
     }
+    
+    public void CloseAllPage()
+    {
+        pageDic.Values.ToList().ForEach(x => x.Close());
+    }
     #endregion
 
     #region Method : override
     protected override async void Init()
     {
+        Debug.Log($"{name} Awake() 시작");
         isInit = false;
 
-        foreach (var page in GetComponentsInChildren<UIPage>())
+        foreach (var page in GetComponentsInChildren<UIPage>(true))
         {
-            pageDic.Add(page.TypeID, page);
             page.Init(this);
+            pageDic.Add(page.TypeID, page);
         }
-
+        Debug.Log($"{name} Awake() 도중 await");
         await UniTask.WaitUntil(() =>
         {
             foreach (var page in pageDic.Values)
@@ -63,12 +69,17 @@ public class UIPageController : UIController
         });
 
         isInit = true;
+
+        UIManager.Instance.RegisterController(this);
+        Debug.Log($"{name} Awake() 끝");
     }
 
     protected override void Deinit()
     {
         pageDic.Clear();
         pageDic = null;
+
+        UIManager.Instance.UnregisterController(this);
     } 
     #endregion
 }

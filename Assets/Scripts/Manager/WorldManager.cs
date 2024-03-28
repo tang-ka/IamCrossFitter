@@ -11,17 +11,15 @@ public enum MainState
     None,
     Loading,
     Main,
-    PersonalRecord
 }
 
-public class WorldManager : ManagerWithState<WorldManager, MainState>
+public class WorldManager : ManagerWithStateSubject<WorldManager, MainState>
 {
-    public SceneHandler sceneHandler = new SceneHandler(
+    private SceneHandler sceneHandler = new SceneHandler(
         new Dictionary<MainState, string>()
         {
             { MainState.Loading, "LoadingScene" },
             { MainState.Main, "MainScene" },
-            { MainState.PersonalRecord, "PersonalRecordScene" }
         });
 
     [SerializeField] Stack<MainState> stateStack = new Stack<MainState>();
@@ -33,20 +31,25 @@ public class WorldManager : ManagerWithState<WorldManager, MainState>
         {
             if (curState == value) return;
 
-            if (value != MainState.None || value != MainState.Loading)
-                stateStack.Push(curState);
-            
+            if (value != MainState.None && value != MainState.Loading)
+            {
+                if (value != PreMainState)
+                    stateStack.Push(curState);
+            }
+
+            if (stateStack.Count > 0)
+                preState = stateStack.Peek();
             curState = value;
 
             SetSceneToState(value);
         }
     }
 
-    public MainState PreMainState => stateStack.Peek();
+    public MainState PreMainState => preState;
 
     private async void SetSceneToState(MainState value)
     {
-        await sceneHandler.LoadScene(value, LoadSceneMode.Additive, 
+        await sceneHandler.LoadScene(value, LoadSceneMode.Additive,
             finishCallback: () =>
             {
                 NotifyChangeState(value);
@@ -61,5 +64,17 @@ public class WorldManager : ManagerWithState<WorldManager, MainState>
     public override void ReturnToPreState()
     {
         CurMainState = stateStack.Pop();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            CurMainState = (curState + 1);
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ReturnToPreState();
+        }
     }
 }

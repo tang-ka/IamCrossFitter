@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PageType
+public enum PageType_old
 {
     None,
 
@@ -19,7 +19,7 @@ public enum PageType
     // PersonalRecord Scene
 }
 
-public class UIManager1 : ManagerBase<UIManager>, IStateObserver<MainState>
+public class UIManager_old : ManagerBase<UIManager_old>, IStateObserver<MainState>
 {
     // UIPageTypeController를 관리하고 싶다.
     List<UIPageTypeController> pageControllers = new List<UIPageTypeController>();
@@ -35,10 +35,10 @@ public class UIManager1 : ManagerBase<UIManager>, IStateObserver<MainState>
         base.Init();
     }
 
-    public override void Reset()
+    public override void Deinit()
     {
         WorldManager.Instance.RemoveObserver(this);
-        base.Reset();
+        base.Deinit();
     }
 
     #region Utility
@@ -141,8 +141,6 @@ public class UIManager1 : ManagerBase<UIManager>, IStateObserver<MainState>
                 OpenPage(PageType.SystemUI);
                 OpenPage(PageType.Dashboard);
                 return;
-            case MainState.PersonalRecord:
-                break;
         }
 
     }

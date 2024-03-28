@@ -12,7 +12,7 @@ public class UIPage : UIBase
     #endregion
 
     #region Property
-    PageType PageType => (PageType)Enum.Parse(typeof(PageType),typeID);
+    public PageType PageType => pageType;
     #endregion
 
     #region Mono
@@ -25,6 +25,8 @@ public class UIPage : UIBase
         parentController = controller;
 
         Init();
+
+        pageType = (PageType)Enum.Parse(typeof(PageType), typeID);
     }
 
     public virtual void Open() 
@@ -44,7 +46,7 @@ public class UIPage : UIBase
     #region Method : override
     protected override void Init()
     {
-        foreach (var panel in GetComponentsInChildren<UIPanel>())
+        foreach (var panel in GetComponentsInChildren<UIPanel>(true))
         {
             myPanelList.Add(panel);
             panel.Init(this);
