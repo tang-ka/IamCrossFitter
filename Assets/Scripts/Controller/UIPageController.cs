@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIPageController : UIController
@@ -18,11 +19,46 @@ public class UIPageController : UIController
     public virtual void OpenPage(PageType pageType)
     {
         GetPage(pageType).Open();
+
+        //foreach (var page in pageDic.Values)
+        //{
+        //    if (page.isStartPage)
+        //        page.Open();
+        //    else
+        //        page.Close();
+        //}
     }
 
     public virtual void ClosePage(PageType pageType)
     {
         GetPage(pageType).Close();
+    }
+
+    private async void PageInit()
+    {
+        foreach (var page in GetComponentsInChildren<UIPage>(true))
+        {
+            page.Init(this);
+            pageDic.Add(page.TypeID, page);
+
+            if (page.isStartPage)
+                page.Open();
+            else
+                page.Close();
+        }
+
+        await UniTask.WaitUntil(() =>
+        {
+            foreach (var page in pageDic.Values)
+            {
+                if (!page.IsInit)
+                    return false;
+            }
+
+            return true;
+        });
+
+        isInit = true;
     }
     #endregion
 
@@ -47,31 +83,13 @@ public class UIPageController : UIController
     #endregion
 
     #region Method : override
-    protected override async void Init()
+    protected override void Init()
     {
-        Debug.Log($"{name} Awake() 시작");
         isInit = false;
 
-        foreach (var page in GetComponentsInChildren<UIPage>(true))
-        {
-            page.Init(this);
-            pageDic.Add(page.TypeID, page);
-        }
-        Debug.Log($"{name} Awake() 도중 await");
-        await UniTask.WaitUntil(() =>
-        {
-            foreach (var page in pageDic.Values)
-            {
-                if (!page.IsInit)
-                    return false;
-            }
-            return true;
-        });
-
-        isInit = true;
+        PageInit();
 
         UIManager.Instance.RegisterController(this);
-        Debug.Log($"{name} Awake() 끝");
     }
 
     protected override void Deinit()

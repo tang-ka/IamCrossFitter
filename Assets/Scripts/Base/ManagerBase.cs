@@ -8,18 +8,10 @@ public abstract class ManagerBase<T> : SingletonMonoBehaviour<T> where T : MonoB
     [SerializeField] protected bool isInit;
     public bool IsInit => isInit;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        Init();
-    }
-
     protected void Start()
     {
-        StartSettting();
+        Init();
     }
-
-    protected virtual void StartSettting() { }
 
     public virtual void Init()
     {

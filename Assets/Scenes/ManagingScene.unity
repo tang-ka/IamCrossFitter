@@ -194,7 +194,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Temp4
+  m_Text: Temp3
 --- !u!222 &34816622
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 125038484}
   - component: {fileID: 125038483}
   m_Layer: 0
-  m_Name: btn_Temp2
+  m_Name: btn_Temp1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,7 +554,7 @@ GameObject:
   - component: {fileID: 270130954}
   - component: {fileID: 270130953}
   m_Layer: 0
-  m_Name: btn_Temp4
+  m_Name: btn_Temp3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -744,6 +744,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeID: 
   isInit: 0
+  btnBack: {fileID: 139264906}
+  btnSetting: {fileID: 2070623352}
 --- !u!1 &497256347
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,6 +837,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeID: 
   isInit: 0
+  btnTemp1: {fileID: 125038483}
+  btnTemp2: {fileID: 1096081429}
+  btnTemp3: {fileID: 270130953}
+  btnTemp4: {fileID: 1528081747}
 --- !u!1 &500763558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,7 +1515,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Temp3
+  m_Text: Temp2
 --- !u!222 &1070902432
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1531,7 +1537,7 @@ GameObject:
   - component: {fileID: 1096081430}
   - component: {fileID: 1096081429}
   m_Layer: 0
-  m_Name: btn_Temp3
+  m_Name: btn_Temp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1850,6 +1856,7 @@ MonoBehaviour:
   typeID: 
   isInit: 0
   pageType: 0
+  isStartPage: 0
 --- !u!1 &1506603592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1921,7 +1928,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Temp2
+  m_Text: Temp1
 --- !u!222 &1506603595
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1943,7 +1950,7 @@ GameObject:
   - component: {fileID: 1528081748}
   - component: {fileID: 1528081747}
   m_Layer: 0
-  m_Name: btn_Temp5
+  m_Name: btn_Temp4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2639,7 +2646,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Temp5
+  m_Text: Temp4
 --- !u!222 &2105168669
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2699,4 +2706,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   typeID: 
-  panelList: []
+  isInit: 0
+  pageType: 0
+  isStartPage: 0

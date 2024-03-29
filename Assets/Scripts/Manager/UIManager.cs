@@ -44,24 +44,15 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
 
     public void OpenPage(PageType pageType)
     {
-        Debug.Log("1 : " + pageControllerList.Count);
-
-        var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-        Debug.Log("2 : " + pageControllerList.Count);
-
-        controller.OpenPage(pageType);
-        Debug.Log("3 : " + pageControllerList.Count);
-        //try
-        //{
-        //    var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-        //    Debug.Log(pageControllerList.Count);
-
-        //    controller.OpenPage(pageType);
-        //}
-        //catch (NullReferenceException)
-        //{
-        //    throw new NullReferenceException("The page you requested is not available. Make sure the page is active.");
-        //}
+        try
+        {
+            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+            controller.OpenPage(pageType);
+        }
+        catch (NullReferenceException)
+        {
+            throw new NullReferenceException("The page you requested is not available. Make sure the page is active.");
+        }
     }
 
     public void ClosePage(PageType pageType)

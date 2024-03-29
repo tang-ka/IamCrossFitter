@@ -39,6 +39,7 @@ public class WorldManager : ManagerWithStateSubject<WorldManager, MainState>
 
             if (stateStack.Count > 0)
                 preState = stateStack.Peek();
+
             curState = value;
 
             SetSceneToState(value);
@@ -49,9 +50,11 @@ public class WorldManager : ManagerWithStateSubject<WorldManager, MainState>
 
     private async void SetSceneToState(MainState value)
     {
+        sceneHandler.UnloadScene(preState);
         await sceneHandler.LoadScene(value, LoadSceneMode.Additive,
             finishCallback: () =>
             {
+                Debug.Log("FinishCallback");
                 NotifyChangeState(value);
             });
     }
@@ -63,7 +66,10 @@ public class WorldManager : ManagerWithStateSubject<WorldManager, MainState>
 
     public override void ReturnToPreState()
     {
-        CurMainState = stateStack.Pop();
+        if (stateStack.Peek() != MainState.None && stateStack.Peek() != MainState.Loading)
+            CurMainState = stateStack.Pop();
+        else
+            Debug.Log("Current is first page");
     }
 
     private void Update()

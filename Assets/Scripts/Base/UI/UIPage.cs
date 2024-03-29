@@ -9,6 +9,7 @@ public class UIPage : UIBase
     UIPageController parentController;
     List<UIPanel> myPanelList = new List<UIPanel>();
     [SerializeField] PageType pageType;
+    public bool isStartPage = false;
     #endregion
 
     #region Property
@@ -31,15 +32,15 @@ public class UIPage : UIBase
 
     public virtual void Open() 
     { 
-        Active(true);
         Debug.Log($"Activate Page : {typeID}");
+        Active(true);
     }
 
 
     public virtual void Close() 
     { 
-        Active(false);
         Debug.Log($"Deactivate Page : {typeID}");
+        Active(false);
     }
     #endregion
 

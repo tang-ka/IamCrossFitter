@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIPageSetting : UIPage_old
+public class UIPageSetting : UIPage
 {
     protected override void Init()
     {

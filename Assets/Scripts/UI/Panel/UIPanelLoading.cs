@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPanelLoading : UIPanel_old
+public class UIPanelLoading : UIPanel
 {
     [SerializeField] List<Transform> titleText = new List<Transform>();
     [SerializeField] Image imgLoadging;
@@ -27,9 +27,15 @@ public class UIPanelLoading : UIPanel_old
         base.Init();
     }
 
-    public override void Activate(bool isActive)
+    protected override void Deinit()
     {
-        base.Activate(isActive);
+        isFinished = true;
+        base.Deinit();
+    }
+
+    protected override void Active(bool isActive)
+    {
+        base.Active(isActive);
 
         if (isActive)
         {
