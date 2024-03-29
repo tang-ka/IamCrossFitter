@@ -17,11 +17,12 @@ public class InitializeManager : ManagerBase<InitializeManager>, IStateObserver<
     float completeTime = 3;
     double timeOutSeconds = 5;
 
-    protected override void StartSettting()
+    public override async void Init()
     {
-        base.StartSettting();
+        await UniTask.WaitUntil(() => WorldManager.Instance.IsInit);
         WorldManager.Instance.AddObserver(this);
         WorldManager.Instance.CurMainState = MainState.Loading;
+        base.Init();
     }
 
     public async void InitializeApplication()

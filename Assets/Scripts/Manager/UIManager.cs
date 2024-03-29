@@ -30,10 +30,10 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     List<UIPage> additivePages = new List<UIPage>();
     #endregion
 
-    protected override void StartSettting()
+    public override void Init()
     {
-        base.StartSettting();
         WorldManager.Instance.AddObserver(this);
+        base.Init();
     }
 
     public override void Deinit()
