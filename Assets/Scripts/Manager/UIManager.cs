@@ -44,13 +44,13 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
 
     public void OpenPage(PageType pageType)
     {
-        Debug.Log("1" + pageControllerList.Count);
+        Debug.Log("1 : " + pageControllerList.Count);
 
         var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-        Debug.Log("2" + pageControllerList.Count);
+        Debug.Log("2 : " + pageControllerList.Count);
 
         controller.OpenPage(pageType);
-        Debug.Log("3" + pageControllerList.Count);
+        Debug.Log("3 : " + pageControllerList.Count);
         //try
         //{
         //    var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
