@@ -19,9 +19,8 @@ public class InitializeManager : ManagerBase<InitializeManager>, IStateObserver<
 
     public override void Init()
     {
-        UniTask.WaitUntil(() => WorldManager.Instance.IsInit);
         WorldManager.Instance.AddObserver(this);
-        WorldManager.Instance.CurMainState = MainState.Loading;
+        //WorldManager.Instance.CurMainState = MainState.Loading;
         base.Init();
     }
 

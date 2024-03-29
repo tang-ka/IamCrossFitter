@@ -49,6 +49,7 @@ public class WorldManager : ManagerWithState<WorldManager, MainState>
         await sceneHandler.LoadScene(value, LoadSceneMode.Additive, 
             finishCallback: () =>
             {
+                Debug.Log("FinishCallback");
                 NotifyChangeState(value);
             });
     }
@@ -56,6 +57,7 @@ public class WorldManager : ManagerWithState<WorldManager, MainState>
     public override void Init()
     {
         base.Init();
+        CurMainState = MainState.Loading;
     }
 
     public override void ReturnToPreState()
