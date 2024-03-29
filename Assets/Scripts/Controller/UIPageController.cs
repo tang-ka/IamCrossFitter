@@ -53,6 +53,7 @@ public class UIPageController : UIController
     #region UIController
     protected override async void Init()
     {
+        Debug.Log($"{name}의 Awake() 시작");
         IsInit = false;
 
         foreach (var page in GetComponentsInChildren<UIPage>(true))
@@ -60,7 +61,7 @@ public class UIPageController : UIController
             page.Init(this);
             pageDic.Add(page.TypeID, page);
         }
-
+        Debug.Log($"{name}의 Awake() await");
         await UniTask.WaitUntil(() =>
         {
             foreach (var page in pageDic.Values)

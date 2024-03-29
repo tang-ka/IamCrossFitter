@@ -18,6 +18,7 @@ public class UIPageTypeController : UIPageController
     {
         base.Init();
         UIManager.Instance.RegisterPageController(this);
+        Debug.Log($"{name}ÀÇ Awake() ³¡");
     }
 
     public override void Reset()

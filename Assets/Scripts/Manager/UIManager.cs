@@ -86,6 +86,7 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
             }
 
             curPage = pageController.OpenPage(page);
+            Debug.Log("count : " + pageControllers.Count);
             curOpenedPages.Add(curPage);
         }
     }
