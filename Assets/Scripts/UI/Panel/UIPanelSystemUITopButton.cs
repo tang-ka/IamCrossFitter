@@ -22,6 +22,11 @@ public class UIPanelSystemUITopButton : UIPanel
         base.Init();
     }
 
+    public void OnClickBack()
+    {
+
+    }
+
     public override void Activate()
     {
         base.Activate();

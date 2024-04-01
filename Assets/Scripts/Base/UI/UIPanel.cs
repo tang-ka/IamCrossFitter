@@ -25,13 +25,13 @@ public class UIPanel : UIBase
 
     public virtual void Activate()
     {
-        Debug.Log($"Activate Panel : {typeID}");
+        //Debug.Log($"Activate Panel : {typeID}");
         Active(true);
     }
 
     public virtual void Deactivate()
     {
-        Debug.Log($"Deactivate Panel : {typeID}");
+        //Debug.Log($"Deactivate Panel : {typeID}");
         Active(false);
     }
     #endregion

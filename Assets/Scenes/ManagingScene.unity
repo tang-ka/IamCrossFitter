@@ -2453,6 +2453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInit: 0
+  movementTypeList: 
 --- !u!1 &2070623350
 GameObject:
   m_ObjectHideFlags: 0

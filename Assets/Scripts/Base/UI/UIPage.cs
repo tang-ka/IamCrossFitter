@@ -32,14 +32,14 @@ public class UIPage : UIBase
 
     public virtual void Open() 
     { 
-        Debug.Log($"Activate Page : {typeID}");
+        //Debug.Log($"Activate Page : {typeID}");
         Active(true);
     }
 
 
     public virtual void Close() 
     { 
-        Debug.Log($"Deactivate Page : {typeID}");
+        //Debug.Log($"Deactivate Page : {typeID}");
         Active(false);
     }
     #endregion

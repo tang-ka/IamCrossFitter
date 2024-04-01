@@ -10,6 +10,8 @@ public class ToggleListItem<T> : ListItem<T>
     protected Toggle toggle;
     [SerializeField] Button btnDelete;
 
+    public Toggle Toggle => toggle;
+
     protected virtual void Start()
     {
         toggle = GetComponent<Toggle>();
