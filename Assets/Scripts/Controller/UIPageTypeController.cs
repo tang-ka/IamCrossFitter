@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIPageTypeController : UIPageController
+public class UIPageTypeController : UIPageController_old
 {
-    public virtual UIPage OpenPage(PageType type)
+    public virtual UIPage_old OpenPage(PageType type)
     {
         return OpenPage(type.ToString());
     }
@@ -17,13 +17,12 @@ public class UIPageTypeController : UIPageController
     protected override void Init()
     {
         base.Init();
-        UIManager.Instance.RegisterPageController(this);
-        Debug.Log($"{name}ÀÇ Awake() ³¡");
+        //UIManager.Instance.RegisterPageController(this);
     }
 
-    public override void Reset()
+    protected override void Deinit()
     {
-        UIManager.Instance.UnregisterPageController(this);
-        base.Reset();
+        //UIManager.Instance.UnregisterPageController(this);
+        base.Deinit();
     }
 }

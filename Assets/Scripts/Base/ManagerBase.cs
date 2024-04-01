@@ -1,26 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ManagerBase<T> : SingletonMonoBehaviour<T> where T : MonoBehaviour
 {
-    public bool IsInit { get; protected set; }
+    [SerializeField] protected bool isInit;
+    public bool IsInit => isInit;
 
-    protected virtual void Start()
+    protected void Start()
     {
         Init();
     }
 
     public virtual void Init()
     {
-        IsInit = true;
+        isInit = true;
     }
 
-    public virtual void Reset() { }
+    public virtual void Deinit() { }
 }
 
 
-public abstract class ManagerWithState<T, U> : ManagerBase<T>, IStateSubject<U> 
+public abstract class ManagerWithStateSubject<T, U> : ManagerBase<T>, IStateSubject<U> 
     where T : MonoBehaviour where U : System.Enum
 {
     protected List<IStateObserver<U>> observers = new List<IStateObserver<U>>();

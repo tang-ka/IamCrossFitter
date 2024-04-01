@@ -1,70 +1,93 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIPage : UIBase
 {
-    public PageType pageType => (PageType)Enum.Parse(typeof(PageType), typeID);
-    [SerializeField] protected List<UIPanel> panelList = new List<UIPanel>();
-    protected UIPageController parentController;
+    #region Member
+    UIPageController parentController;
+    List<UIPanel> myPanelList = new List<UIPanel>();
+    [SerializeField] PageType pageType;
+    public bool isStartPage = false;
+    #endregion
 
-    public float currentWidth => GetComponent<RectTransform>().rect.width;
+    #region Property
+    public PageType PageType => pageType;
+    #endregion
 
-    private void OnDestroy() { Reset(); }
+    #region Mono
+    private void OnDestroy() { Deinit(); }
+    #endregion
 
+    #region Method : virtual
+    public virtual void Init(UIPageController controller)
+    {
+        parentController = controller;
+
+        Init();
+
+        pageType = (PageType)Enum.Parse(typeof(PageType), typeID);
+    }
+
+    public virtual void Open() 
+    { 
+        //Debug.Log($"Activate Page : {typeID}");
+        Active(true);
+    }
+
+
+    public virtual void Close() 
+    { 
+        //Debug.Log($"Deactivate Page : {typeID}");
+        Active(false);
+    }
+    #endregion
+
+    #region Method : override
     protected override void Init()
     {
         foreach (var panel in GetComponentsInChildren<UIPanel>(true))
         {
-            panelList.Add(panel);
-            InitPanel(panel);
+            myPanelList.Add(panel);
+            panel.Init(this);
         }
 
-        IsInit = true;
+        isInit = true;
     }
 
-    public virtual void Init(UIPageController Parent)
+    protected override void Deinit()
     {
-        Init();
-        parentController = Parent;
+        myPanelList.Clear();
+        myPanelList = null;
     }
 
-    public override void Reset()
+    protected override void Active(bool isActive)
     {
-        panelList?.Clear();
-        panelList = null;
-    }
+        if (!isInit)
+            Init(GetComponentInParent<UIPageController>());
 
-    public override void Activate(bool isActive)
-    {
         gameObject.SetActive(isActive);
 
-        if (panelList != null)
+        if (myPanelList != null)
         {
-            foreach(var panel in panelList)
-                panel.Activate(isActive);
+            foreach (var panel in myPanelList)
+            {
+                if (isActive)
+                    panel.Activate();
+                else
+                    panel.Deactivate();
+            }
         }
-    }
 
-    #region Method
-    public virtual void Open() { Activate(true); }
-
-    public virtual void Close() { Activate(false); }
-
-    public virtual void ExcuteData(Dictionary<string, object> data) { }
-    public virtual void SetCallbacks(Dictionary<string, Action> callbacks) { }
-    public virtual void SetResultCallback(Action<object> callback) { }
-
-    protected virtual void InitPanel(UIPanel panel)
-    {
-        panel.Init(this);
-    }
-
-    public virtual TPanel GetPanel<TPanel>() where TPanel : UIPanel
-    {
-        return panelList.Find((x) => x.GetType() == typeof(TPanel)) as TPanel;
     }
     #endregion
+
+    #region Util
+    public virtual TPanel GetPanel<TPanel>() where TPanel : UIPanel
+    {
+        return myPanelList.Find((panel) => panel.GetType() == typeof(TPanel)) as TPanel;
+    }
+    #endregion
+
 }

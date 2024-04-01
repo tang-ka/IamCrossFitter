@@ -27,9 +27,15 @@ public class UIPanelLoading : UIPanel
         base.Init();
     }
 
-    public override void Activate(bool isActive)
+    protected override void Deinit()
     {
-        base.Activate(isActive);
+        isFinished = true;
+        base.Deinit();
+    }
+
+    protected override void Active(bool isActive)
+    {
+        base.Active(isActive);
 
         if (isActive)
         {

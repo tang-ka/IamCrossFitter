@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
-
+  
 public enum PageType
 {
     None,
@@ -14,20 +15,20 @@ public enum PageType
     Loading,
 
     // Main Scene
-    Dashboard,
+    Dashboard, Record
 
     // PersonalRecord Scene
 }
 
 public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
 {
-    // UIPageTypeController를 관리하고 싶다.
-    List<UIPageTypeController> pageControllers = new List<UIPageTypeController>();
+    [SerializeField] List<UIPageController> pageControllerList = new List<UIPageController>();
 
-    UIPage curPage;
-    UIPage prePage;
-
-    [SerializeField] List<UIPage> curOpenedPages = new List<UIPage>();
+    #region Page OpenMode Handler
+    List<UIPage> backgroundPages = new List<UIPage>();
+    List<UIPage> statePages = new List<UIPage>();
+    List<UIPage> additivePages = new List<UIPage>();
+    #endregion
 
     public override void Init()
     {
@@ -35,116 +36,80 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
         base.Init();
     }
 
-    public override void Reset()
+    public override void Deinit()
     {
         WorldManager.Instance.RemoveObserver(this);
-        base.Reset();
+        base.Deinit();
     }
 
-    #region Utility
-    /// <summary>
-    /// Utility : Set visibility for all UI(PageController)
-    /// </summary>
-    /// <param name="visible"></param>
-    public void SetUIVisibility(bool visible)
+    public void OpenPage(PageType pageType)
     {
-        pageControllers.ForEach((controller) =>
+        try
         {
-            controller.SetVisible(visible);
-        });
-    }
-
-    /// <summary>
-    /// Utility : Get page with page's name
-    /// </summary>
-    /// <param name="pageName"></param>
-    /// <returns></returns>
-    /// <exception cref="NullReferenceException"></exception>
-    public UIPage GetPage(string pageName)
-    {
-        foreach (var controller in pageControllers)
-            return controller.GetPage(pageName);
-
-        throw new NullReferenceException($"There is no page with {pageName}'s name. Please check the page name again.");
-    }
-    #endregion
-
-    public void OpenPage(PageType page)
-    {
-        var pageController = pageControllers.Find((controller) => controller.IsPageAvailable(page.ToString()));
-
-        if (pageController != null)
+            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+            controller.OpenPage(pageType);
+        }
+        catch (NullReferenceException)
         {
-            if (curOpenedPages.Contains(pageController.GetPage(page.ToString())))
-                return;
-
-            Debug.Log($"Open page : {page}");
-
-            if (curPage != null)
-            {
-                prePage = curPage;
-            }
-
-            curPage = pageController.OpenPage(page);
-            Debug.Log("count : " + pageControllers.Count);
-            curOpenedPages.Add(curPage);
+            throw new NullReferenceException("The page you requested is not available. Make sure the page is active.");
         }
     }
 
-    public void CloseCurPage()
+    public void ClosePage(PageType pageType)
     {
-        if (curPage != null)
+        try
         {
-            Debug.Log($"Close current page : {curPage.TypeID}");
-            curPage.Close();
+            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
 
-            curPage.Close();
-            curOpenedPages.Remove(curPage);
-
-            curPage = null;
+            controller.ClosePage(pageType);
+        }
+        catch (NullReferenceException)
+        {
+            throw new NullReferenceException("The page you requested is not available. Make sure the page is active.");
         }
     }
 
-    public void CloseStackedPages()
+    public UIPage GetPage(PageType pageType)
     {
-        
+        try
+        {
+            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+            return controller.GetPage(pageType);
+        }
+        catch (NullReferenceException)
+        {
+            throw new NullReferenceException("The page you requested is not available. Make sure the page is active.");
+        }
     }
 
-    public void CloseAllPages()
+    public void RegisterController(UIPageController controller)
     {
-        
+        if (!pageControllerList.Contains(controller))
+            pageControllerList.Add(controller);
     }
 
-
-    public void RegisterPageController(UIPageTypeController controller)
+    public void UnregisterController(UIPageController controller)
     {
-        if (!pageControllers.Contains(controller))
-            pageControllers.Add(controller);
+        pageControllerList.Remove(controller);
     }
 
-    public void UnregisterPageController(UIPageTypeController controller)
-    {
-        pageControllers.Remove(controller);
-    }
-
-    // Set the page to open first as the MainState changes
     public void Notify(MainState state)
     {
+        Debug.Log($"{gameObject.name} listen notification : {state}");
+
         switch (state)
         {
             case MainState.None:
-                OpenPage(PageType.None);
-                return;
+                break;
             case MainState.Loading:
-                OpenPage(PageType.Loading);
-                return;
+                OpenPage(PageType.Loading); // OpenMode : Default
+                break;
             case MainState.Main:
-                OpenPage(PageType.SystemUI);
-                OpenPage(PageType.Dashboard);
-                return;
-            case MainState.PersonalRecord:
+                OpenPage(PageType.SystemUI); // OpenMode : Background
+                OpenPage(PageType.Dashboard); // OpenMode : Default
+                break;
+            default:
                 break;
         }
-
     }
 }

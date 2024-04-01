@@ -4,13 +4,19 @@ using UnityEngine;
 
 public abstract class UIBase : MonoBehaviour
 {
+    #region Member
     [SerializeField] protected string typeID;
+    [SerializeField] protected bool isInit;
+    #endregion
 
-    public virtual string TypeID => typeID;
+    #region Property
+    public string TypeID => typeID;
+    public bool IsInit => isInit;
+    #endregion
 
-    public bool IsInit { get; protected set; }
-
+    #region Method : abstract
     protected abstract void Init();
-    public abstract void Reset();
-    public abstract void Activate(bool isActive);
+    protected abstract void Deinit();
+    protected abstract void Active(bool isActive); 
+    #endregion
 }

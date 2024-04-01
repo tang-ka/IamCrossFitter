@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
-using TMPro.EditorUtilities;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class UIPageController : UIController
 {
@@ -12,56 +12,41 @@ public class UIPageController : UIController
 
     #region Mono
     private void Awake() { Init(); }
-    private void OnDestroy() { Reset(); }
+    private void OnDestroy() { Deinit(); }
     #endregion
 
-    #region Methods
-    public bool IsPageAvailable(string pageID)
+    #region Method
+    public virtual void OpenPage(PageType pageType)
     {
-        return pageDic.ContainsKey(pageID);
+        GetPage(pageType).Open();
+
+        //foreach (var page in pageDic.Values)
+        //{
+        //    if (page.isStartPage)
+        //        page.Open();
+        //    else
+        //        page.Close();
+        //}
     }
 
-    public void SetVisible(bool isVisible)
+    public virtual void ClosePage(PageType pageType)
     {
-        GetComponent<Canvas>().enabled = isVisible;
+        GetPage(pageType).Close();
     }
 
-    public UIPage GetPage(string pageID)
+    private async void PageInit()
     {
-        if (IsPageAvailable(pageID))
-            return pageDic[pageID];
-
-        //return null;
-        throw new NullReferenceException("That page is unavailable.");
-    }
-
-    public virtual UIPage OpenPage(string pageID)
-    {
-        var pageToOpen = GetPage(pageID);
-        pageToOpen.Open();
-
-        return pageToOpen;
-    }
-
-    public virtual void ClosePage(string pageID)
-    {
-        var pateToClose = GetPage(pageID);
-        pateToClose.Close();
-    }
-    #endregion
-
-    #region UIController
-    protected override async void Init()
-    {
-        Debug.Log($"{name}의 Awake() 시작");
-        IsInit = false;
-
         foreach (var page in GetComponentsInChildren<UIPage>(true))
         {
             page.Init(this);
             pageDic.Add(page.TypeID, page);
+
+            if (page.isStartPage)
+                page.Open();
+            else
+                page.Close();
         }
-        Debug.Log($"{name}의 Awake() await");
+
         await UniTask.WaitUntil(() =>
         {
             foreach (var page in pageDic.Values)
@@ -69,18 +54,50 @@ public class UIPageController : UIController
                 if (!page.IsInit)
                     return false;
             }
+
             return true;
         });
 
-        IsInit = true;
+        isInit = true;
     }
+    #endregion
 
-    public override void Reset()
+    #region Util
+    public bool IsPageAvailable(PageType pageType)
     {
-        foreach (var page in pageDic.Values)
-            page.Reset();
-
-        pageDic.Clear();
+        return pageDic.ContainsKey(pageType.ToString());
     }
+
+    public UIPage GetPage(PageType pageType) 
+    {
+        if (IsPageAvailable(pageType))
+            return pageDic[pageType.ToString()];
+
+        throw new NullReferenceException($"This page is unavailable in PageController - {gameObject.name}");
+    }
+    
+    public void CloseAllPage()
+    {
+        pageDic.Values.ToList().ForEach(x => x.Close());
+    }
+    #endregion
+
+    #region Method : override
+    protected override void Init()
+    {
+        isInit = false;
+
+        PageInit();
+
+        UIManager.Instance.RegisterController(this);
+    }
+
+    protected override void Deinit()
+    {
+        pageDic.Clear();
+        pageDic = null;
+
+        UIManager.Instance.UnregisterController(this);
+    } 
     #endregion
 }

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="W"></typeparam>
-public abstract class DataListPanel<T, W> : MonoBehaviour where T : ListItem<W>
+public abstract class DataListPanel<T, W> : UIPanel where T : ListItem<W>
 {
     [SerializeField] GameObject itemPrefab;
     protected List<T> itemList = new List<T>();

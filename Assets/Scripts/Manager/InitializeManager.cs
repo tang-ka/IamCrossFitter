@@ -58,7 +58,7 @@ public class InitializeManager : ManagerBase<InitializeManager>, IStateObserver<
 
         onCompleteInitialize?.Invoke(isSuccess);
 
-        WorldManager.Instance.sceneHandler.UnloadScene(MainState.Loading);
+        //WorldManager.Instance.sceneHandler.UnloadScene(MainState.Loading);
         WorldManager.Instance.CurMainState = MainState.Main;
     }
 
