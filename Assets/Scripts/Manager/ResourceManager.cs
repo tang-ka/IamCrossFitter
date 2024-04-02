@@ -6,7 +6,7 @@ using UnityEngine;
 public class ResourceManager : ManagerBase<ResourceManager>
 {
     public List<MovementType> movementTypeList = new List<MovementType>();
-    Dictionary<MovementType, List<Movement>> movementDic = new Dictionary<MovementType, List<Movement>>();
+    public Dictionary<MovementType, List<Movement>> movementDic = new Dictionary<MovementType, List<Movement>>();
 
     protected override void Awake()
     {

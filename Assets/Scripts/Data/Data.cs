@@ -7,20 +7,21 @@ public class Movement
 {
     public MovementType type;
     public string name;
-    public MovementRecord record;
-    bool hasRecord = false;
+    public List<MovementRecord> record = new List<MovementRecord>();
+    public bool hasRecord = false;
 
-    public Movement(MovementType type, string name, MovementRecord record = default)
+    public Movement(MovementType type, string name, List<MovementRecord> record = null)
     {
         this.type = type;
         this.name = name;
-        this.record = record;
 
-        if (record.Equals(default))
+        if (record == null || record.Count == 0)
             this.hasRecord = false;
         else
+        {
+            this.record = record;
             this.hasRecord = true;
-
+        }
     }
 }
 
@@ -35,6 +36,13 @@ public struct MovementRecord
 
     public float weight_lb;
     public float weight_kg;
+
+    public MovementRecord(int reps, float lb)
+    {
+        this.reps = reps;
+        weight_lb = lb;
+        weight_kg = (float)Math.Round(lb * 0.453592f, 2);
+    }
 }
 
 public class DataStorage
@@ -58,7 +66,10 @@ public class DataStorage
                 case MovementType.Clean:
                     list = new List<Movement>()
                     {
-                        new Movement(type, "Power Clean"),
+                        new Movement(type, "Power Clean", new List<MovementRecord>()
+                        {
+                            new MovementRecord(1, 215),
+                        }),
                         new Movement(type, "Squat Clean"),
                         new Movement(type, "Hang Power Clean"),
                         new Movement(type, "Hang Squat Clean"),
@@ -87,7 +98,10 @@ public class DataStorage
                 case MovementType.Deadlift:
                     list = new List<Movement>()
                     {
-                        new Movement(type, "Deadlift"),
+                        new Movement(type, "Deadlift", new List<MovementRecord>()
+                        {
+                            new MovementRecord(1, 325),
+                        }),
                         new Movement(type, "Snatch Deadlift")
                     };
                     break;
@@ -95,7 +109,10 @@ public class DataStorage
                     list = new List<Movement>()
                     {
                         new Movement(type, "Back Squat"),
-                        new Movement(type, "Front Squat"),
+                        new Movement(type, "Front Squat", new List<MovementRecord>()
+                        {
+                            new MovementRecord(1, 255),
+                        }),
                         new Movement(type, "Overhead Squat"),
                         new Movement(type, "Split Barbell Squat")
                     };

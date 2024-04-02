@@ -39,12 +39,12 @@ public class ToggleListItem<T> : ListItem<T>
 
     protected override void SelectItem()
     {
-        Debug.Log($"Select {gameObject.name}");
+        //Debug.Log($"Select {gameObject.name}");
     }
 
     protected override void DeselectItem()
     {
-        Debug.Log($"Deselect {gameObject.name}");
+        //Debug.Log($"Deselect {gameObject.name}");
     }
 
     protected virtual void DeletItem() { }

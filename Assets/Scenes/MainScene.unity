@@ -403,7 +403,7 @@ RectTransform:
   m_AnchorMin: {x: 0.05, y: 0.5}
   m_AnchorMax: {x: 0.05, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 80}
+  m_SizeDelta: {x: 396, y: 80}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &542249135
 MonoBehaviour:
@@ -741,7 +741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &868396373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -760,10 +760,10 @@ RectTransform:
   m_Father: {fileID: 1722889852}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 150}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -435}
+  m_SizeDelta: {x: 1036.8, y: 150}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &868396374
 CanvasRenderer:
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_Color: {r: 0.44313726, g: 0.57254905, b: 0.3882353, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2059,7 +2059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1915839935
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2078,10 +2078,10 @@ RectTransform:
   m_Father: {fileID: 1722889852}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 150}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -265}
+  m_SizeDelta: {x: 1036.8, y: 150}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1915839936
 CanvasRenderer:
@@ -2205,6 +2205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1950560799}
   - component: {fileID: 1950560800}
+  - component: {fileID: 1950560801}
   m_Layer: 0
   m_Name: Panel_MovementList
   m_TagString: Untagged
@@ -2248,6 +2249,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeID: 
   isInit: 0
+  itemPrefab: {fileID: 6580919179124308259, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
+    type: 3}
+  scrollView: {fileID: 2007330073}
+  content: {fileID: 1722889852}
+  listItemPool: []
+--- !u!114 &1950560801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950560798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &2007330071
 GameObject:
   m_ObjectHideFlags: 0
@@ -2690,7 +2709,7 @@ RectTransform:
   m_AnchorMin: {x: 0.05, y: 0.5}
   m_AnchorMax: {x: 0.05, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 80}
+  m_SizeDelta: {x: 260, y: 80}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2146275969
 MonoBehaviour:
@@ -2719,7 +2738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  m_Color: {r: 0.15, g: 0.15, b: 0.15, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2899,10 +2918,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1722889852}
     m_Modifications:
+    - target: {fileID: 841825260129469698, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6580919178149095805, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 271
+      objectReference: {fileID: 0}
+    - target: {fileID: 6580919178981782750, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6580919178981782750, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6580919178981782750, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
@@ -2927,7 +2966,7 @@ PrefabInstance:
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
@@ -2937,12 +2976,12 @@ PrefabInstance:
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1036.8
       objectReference: {fileID: 0}
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
@@ -2992,7 +3031,7 @@ PrefabInstance:
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -95
       objectReference: {fileID: 0}
     - target: {fileID: 6580919179124308258, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
         type: 3}
@@ -3013,6 +3052,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MovementListItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6580919179124308259, guid: 7323fafa1c8929e4fb5bbc8d725224e2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7323fafa1c8929e4fb5bbc8d725224e2, type: 3}

@@ -375,6 +375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6580919179124308258}
   - component: {fileID: 6580919179124308257}
+  - component: {fileID: 1113442803789241081}
   - component: {fileID: 6580919179124308256}
   m_Layer: 0
   m_Name: MovementListItemPrefab
@@ -454,6 +455,24 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &1113442803789241081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6580919179124308259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbf09f86e7b4c84892cd3e0909476bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnDelete: {fileID: 0}
+  background: {fileID: 6580919178981782750}
+  title: {fileID: 6580919178149095804}
+  recordBackground: {fileID: 841825259489530786}
+  recordValue: {fileID: 841825261323062021}
+  record: {fileID: 841825260129469698}
 --- !u!222 &6580919179124308256
 CanvasRenderer:
   m_ObjectHideFlags: 0

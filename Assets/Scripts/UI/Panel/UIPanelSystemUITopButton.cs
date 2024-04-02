@@ -8,6 +8,7 @@ public class UIPanelSystemUITopButton : UIPanel
 {
     [SerializeField] Button btnBack;
     [SerializeField] Button btnSetting;
+    [SerializeField] Text title;
 
     protected override void Init()
     {
@@ -20,6 +21,11 @@ public class UIPanelSystemUITopButton : UIPanel
         });
 
         base.Init();
+    }
+
+    public void SetTitle(string title)
+    {
+        this.title.text = title;
     }
 
     public void OnClickBack()

@@ -39,7 +39,7 @@ public class UIPanelLoading : UIPanel
 
         if (isActive)
         {
-            UniTask.WaitUntil(() =>
+            UniTask.WaitUntil(() => 
             {
                 curTime += Time.deltaTime;
                 if (curTime > timeCap)
@@ -59,8 +59,6 @@ public class UIPanelLoading : UIPanel
             txtLoading.text = "";
         }
     }
-
-
 
     private void TextAnimation()
     {

@@ -8,7 +8,9 @@ using UnityEngine.XR;
 public class UIPanel : UIBase
 {
     #region Member
-    UIPage parentPage; 
+    protected UIPage parentPage;
+
+    public UIPage ParentPage => parentPage;
     #endregion
 
     #region Mono

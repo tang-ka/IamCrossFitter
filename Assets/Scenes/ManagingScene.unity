@@ -746,6 +746,7 @@ MonoBehaviour:
   isInit: 0
   btnBack: {fileID: 139264906}
   btnSetting: {fileID: 2070623352}
+  title: {fileID: 0}
 --- !u!1 &497256347
 GameObject:
   m_ObjectHideFlags: 0

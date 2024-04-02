@@ -10,7 +10,7 @@ public class Test : MonoBehaviour
 
     public void Start()
     {
-        StartAsync();
+        //StartAsync();
     }
 
     async Task StartAsync()

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class ListItem<T> : MonoBehaviour
 {
+    protected UIPanel parentPanel;
     protected T data;
 
     public T Data => data;
@@ -13,8 +14,9 @@ public abstract class ListItem<T> : MonoBehaviour
     protected abstract void SelectItem();
     protected abstract void DeselectItem();
 
-    public virtual void SetData(T data)
+    public virtual void SetData(T data, UIPanel panel)
     {
         this.data = data;
+        parentPanel = panel;
     }
 }

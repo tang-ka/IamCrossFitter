@@ -16,30 +16,31 @@ public class MovementTypeListItem : ToggleListItem<MovementType>
         base.Start();
 
         rectTransform = GetComponent<RectTransform>();
-        await UniTask.WaitUntil(() => title.rectTransform.rect.width != 0);
+        await UniTask.WaitUntil(() => title.text.Length > 0);
         rectTransform.sizeDelta = new Vector2(background.rect.width, rectTransform.rect.height);
 
         if (data == MovementType.Clean)
             toggle.isOn = true;
     }
 
-    public override void SetData(MovementType data)
+    public override void SetData(MovementType data, UIPanel panel)
     {
-        base.SetData(data);
+        base.SetData(data, panel);
         
         title.text = data.ToString();
     }
 
     protected override void SelectItem()
     {
-        Debug.Log($"Select {data}");
+        //Debug.Log($"Select {data}");
 
         SetColor(ColorDefine.SELECT_COLOR, ColorDefine.SELECT_COLOR);
+        ((parentPanel as UIPanelMovementTypeList).ParentPage as UIPageMovementList).SelectType(data);
     }
 
     protected override void DeselectItem()
     {
-        Debug.Log($"Deselect {data}");
+        //Debug.Log($"Deselect {data}");
 
         SetColor(ColorDefine.WHITE_COLOR, ColorDefine.WHITE_COLOR);
     }

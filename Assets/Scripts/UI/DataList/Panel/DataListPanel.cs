@@ -41,7 +41,7 @@ public abstract class DataListPanel<T, W> : UIPanel where T : ListItem<W>
             itemList.Add(item);
         }
 
-        item.SetData(data);
+        item.SetData(data, this);
         item.GetComponent<RectTransform>().localScale = Vector3.one;
         item.gameObject.SetActive(true);
     }
