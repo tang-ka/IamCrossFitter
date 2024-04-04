@@ -24,15 +24,13 @@ public class MovementListItem : ToggleListItem<Movement>
 
     protected override void SelectItem()
     {
-        base.SelectItem();
+        ((parentPanel as UIPanelMovementList).ParentPage as UIPageMovementList).SelectMovement(data);
 
         SetColor(ColorDefine.BLACK15_COLOR, ColorDefine.SELECT_COLOR);
     }
 
     protected override void DeselectItem()
     {
-        base.DeselectItem();
-
         SetColor(ColorDefine.WHITE_COLOR, ColorDefine.BLACK20_COLOR);
     }
 

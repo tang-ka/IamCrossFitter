@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
-public class ToggleListItem<T> : ListItem<T>
+public abstract class ToggleListItem<T> : ListItem<T>
 {
     protected Toggle toggle;
     [SerializeField] Button btnDelete;
@@ -23,6 +24,8 @@ public class ToggleListItem<T> : ListItem<T>
                 SelectItem();
             else
                 DeselectItem();
+
+            IsSelected = isSelected;
         });
 
         LinkDeleteButtonListener();
@@ -37,15 +40,8 @@ public class ToggleListItem<T> : ListItem<T>
         btnDelete.onClick.AddListener(DeletItem);
     }
 
-    protected override void SelectItem()
-    {
-        //Debug.Log($"Select {gameObject.name}");
-    }
-
-    protected override void DeselectItem()
-    {
-        //Debug.Log($"Deselect {gameObject.name}");
-    }
+    protected abstract void SelectItem();
+    protected abstract void DeselectItem();
 
     protected virtual void DeletItem() { }
 }

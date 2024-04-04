@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ResourceManager : ManagerBase<ResourceManager>
 {
+    WeightUnit systemUnit = WeightUnit.lb;
+    public WeightUnit SystemUnit { get => systemUnit; set => systemUnit = value; }
+
     public List<MovementType> movementTypeList = new List<MovementType>();
     public Dictionary<MovementType, List<Movement>> movementDic = new Dictionary<MovementType, List<Movement>>();
 

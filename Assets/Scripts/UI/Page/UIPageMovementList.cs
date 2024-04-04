@@ -6,7 +6,10 @@ using UnityEngine;
 public class UIPageMovementList : UIPage
 {
     MovementType selectedType;
+    Movement selectedMovement;
+
     public Action<MovementType> onSelectType;
+    public Action<Movement> onSelectMovement;
 
     protected override void Init()
     {
@@ -19,5 +22,11 @@ public class UIPageMovementList : UIPage
     {
         selectedType = type;
         onSelectType?.Invoke(type);
+    }
+
+    public void SelectMovement(Movement movement)
+    {
+        selectedMovement = movement;
+        onSelectMovement?.Invoke(movement);
     }
 }

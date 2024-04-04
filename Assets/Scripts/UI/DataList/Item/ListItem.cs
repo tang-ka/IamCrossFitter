@@ -11,9 +11,6 @@ public abstract class ListItem<T> : MonoBehaviour
 
     public bool IsSelected { get; protected set; }
 
-    protected abstract void SelectItem();
-    protected abstract void DeselectItem();
-
     public virtual void SetData(T data, UIPanel panel)
     {
         this.data = data;

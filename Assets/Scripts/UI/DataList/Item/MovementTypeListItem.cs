@@ -28,14 +28,15 @@ public class MovementTypeListItem : ToggleListItem<MovementType>
         base.SetData(data, panel);
         
         title.text = data.ToString();
+        name = $"Type - {data.ToString()}";
     }
 
     protected override void SelectItem()
     {
         //Debug.Log($"Select {data}");
+        ((parentPanel as UIPanelMovementTypeList).ParentPage as UIPageMovementList).SelectType(data);
 
         SetColor(ColorDefine.SELECT_COLOR, ColorDefine.SELECT_COLOR);
-        ((parentPanel as UIPanelMovementTypeList).ParentPage as UIPageMovementList).SelectType(data);
     }
 
     protected override void DeselectItem()

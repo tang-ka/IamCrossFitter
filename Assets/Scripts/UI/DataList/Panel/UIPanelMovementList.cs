@@ -4,11 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class UIPanelMovementList : ToggleListPanel<MovementListItem, Movement>
 {
-    [SerializeField ]List<MovementListItem> listItemPool = new List<MovementListItem>();
+    [SerializeField] List<MovementListItem> listItemPool = new List<MovementListItem>();
 
     protected override void Init()
     {
@@ -19,7 +18,7 @@ public class UIPanelMovementList : ToggleListPanel<MovementListItem, Movement>
 
     private void OpenMovementList(MovementType type)
     {
-        Debug.Log("Open movement list is type " + type.ToString());
+        //Debug.Log("Open movement list is type " + type.ToString());
         SetItems(ResourceManager.Instance.movementDic[type]);
     }
 

@@ -16,11 +16,11 @@ public class Movement
         this.name = name;
 
         if (record == null || record.Count == 0)
-            this.hasRecord = false;
+            hasRecord = false;
         else
         {
             this.record = record;
-            this.hasRecord = true;
+            hasRecord = true;
         }
     }
 }
@@ -32,16 +32,23 @@ public class WOD
 
 public struct MovementRecord
 {
+    public string id;
     public int reps;
 
     public float weight_lb;
     public float weight_kg;
 
-    public MovementRecord(int reps, float lb)
+    public DateTime date;
+
+    public MovementRecord(int reps, float lb, DateTime date = default)
     {
         this.reps = reps;
         weight_lb = lb;
         weight_kg = (float)Math.Round(lb * 0.453592f, 2);
+
+        this.date = date;
+
+        id = Guid.NewGuid().ToString();
     }
 }
 
@@ -68,7 +75,11 @@ public class DataStorage
                     {
                         new Movement(type, "Power Clean", new List<MovementRecord>()
                         {
-                            new MovementRecord(1, 215),
+                            new MovementRecord(1, 215, new DateTime(2024, 01, 10)),
+                            new MovementRecord(1, 225, new DateTime(2023, 12, 13)),
+                            new MovementRecord(1, 195, new DateTime(2023, 11, 21)),
+                            new MovementRecord(1, 225, new DateTime(2023, 10, 15)),
+                            new MovementRecord(3, 155, new DateTime(2023, 9, 1)),
                         }),
                         new Movement(type, "Squat Clean"),
                         new Movement(type, "Hang Power Clean"),
@@ -100,7 +111,7 @@ public class DataStorage
                     {
                         new Movement(type, "Deadlift", new List<MovementRecord>()
                         {
-                            new MovementRecord(1, 325),
+                            new MovementRecord(1, 325, new DateTime(2024, 01, 20)),
                         }),
                         new Movement(type, "Snatch Deadlift")
                     };
@@ -111,7 +122,8 @@ public class DataStorage
                         new Movement(type, "Back Squat"),
                         new Movement(type, "Front Squat", new List<MovementRecord>()
                         {
-                            new MovementRecord(1, 255),
+                            new MovementRecord(1, 255, new DateTime(2024, 03, 10)),
+                            new MovementRecord(10, 195, new DateTime(2024, 02, 10)),
                         }),
                         new Movement(type, "Overhead Squat"),
                         new Movement(type, "Split Barbell Squat")
