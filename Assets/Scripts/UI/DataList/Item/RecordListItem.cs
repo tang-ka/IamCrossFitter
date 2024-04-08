@@ -13,8 +13,16 @@ public class RecordListItem : ListItem<MovementRecord>
     {
         base.SetData(data, panel);
 
-        repsValue.text = data.reps.ToString();
-        weightValue.text = data.weight_lb.ToString();
+        if (data.reps != 0)
+            repsValue.text = data.reps.ToString();
+        else
+            repsValue.text = "-";
+
+        if (data.weight_lb != 0)
+            weightValue.text = data.weight_lb.ToString();
+        else
+            weightValue.text = "-";
+
         weigthUnit.text = $"[{ResourceManager.Instance.SystemUnit}]";
     }
 }

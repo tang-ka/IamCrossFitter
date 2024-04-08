@@ -28,21 +28,30 @@ public class UIPanelRecordPreview : DataListPanel<RecordListItem, MovementRecord
 
         var oneRMList = itemList.FindAll(x => x.reps == 1);
 
-        bestRecord = oneRMList[0];
-        oneRMList.ForEach(x =>
+        if (oneRMList.Count != 0)
         {
-            if (bestRecord.weight_lb < x.weight_lb)
-                bestRecord = x;
-            else if (bestRecord.weight_lb == x.weight_lb)
+            bestRecord = oneRMList[0];
+            oneRMList.ForEach(x =>
             {
-                if (bestRecord.date < x.date)
+                if (bestRecord.weight_lb < x.weight_lb)
                     bestRecord = x;
-            }
-        });
+                else if (bestRecord.weight_lb == x.weight_lb)
+                {
+                    if (bestRecord.date < x.date)
+                        bestRecord = x;
+                }
+            });
+
+            listItemPool[0].SetData(bestRecord, this);
+        }
+        else
+        {
+            var unRecord = new MovementRecord(0, 0);
+            listItemPool[0].SetData(unRecord, this);
+        }
 
         var latest = itemList.Find(x => x.date.Equals(itemList.Max(x => x.date)));
-
-        listItemPool[0].SetData(bestRecord, this);
+        
         listItemPool[1].SetData(latest, this);
     }
 
