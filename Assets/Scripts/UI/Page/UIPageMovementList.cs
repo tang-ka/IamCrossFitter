@@ -13,7 +13,7 @@ public class UIPageMovementList : UIPage
 
     protected override void Init()
     {
-        typeID = PageType.Record.ToString();
+        typeID = PageType.MovementList.ToString();
 
         base.Init();
     }

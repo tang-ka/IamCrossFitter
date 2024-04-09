@@ -23,7 +23,7 @@ public class UIPanelSystemUIBottomButton : UIPanel
     public void OnClickTmep4()
     {
         UIManager.Instance.ClosePage(PageType.Dashboard);
-        UIManager.Instance.OpenPage(PageType.Record);
+        UIManager.Instance.OpenPage(PageType.MovementList);
     }
 }
 

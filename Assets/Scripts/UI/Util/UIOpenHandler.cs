@@ -2,17 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIOpenHandler : MonoBehaviour
+public enum OpenMode
 {
-    // Start is called before the first frame update
-    void Start()
+    Background, 
+    Default, 
+    Additive, 
+    OnlyWithBackground, 
+    Only
+}
+
+public class UIOpenHandler
+{
+    public List<UIPage> backgroundPageList = new List<UIPage>();
+
+    public Stack<UIPage> pageStack = new Stack<UIPage>();
+    public UIPage currentMainPage;
+
+    
+    public bool TryOpenBackgroundPage(UIPage page)
     {
-        
+        return true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool TryOpenMainPage(UIPage page)
     {
-        
+        return true;
     }
+
+    public bool TryOpenAdditivePage(UIPage page)
+    {
+        return true;
+    }
+
+
 }

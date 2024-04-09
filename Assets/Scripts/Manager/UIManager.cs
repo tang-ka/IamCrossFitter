@@ -15,7 +15,7 @@ public enum PageType
     Loading,
 
     // Main Scene
-    Dashboard, Record
+    Dashboard, MovementList, PersonalRecord
 
     // PersonalRecord Scene
 }
@@ -25,9 +25,11 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     [SerializeField] List<UIPageController> pageControllerList = new List<UIPageController>();
 
     #region Page OpenMode Handler
-    List<UIPage> backgroundPages = new List<UIPage>();
-    List<UIPage> statePages = new List<UIPage>();
-    List<UIPage> additivePages = new List<UIPage>();
+    protected UIOpenHandler openHandler = new UIOpenHandler();
+
+    public List<UIPage> BackgroundPages => openHandler.backgroundPageList;
+    public Stack<UIPage> PageStack => openHandler.pageStack;
+    public UIPage CurrentMainPage => openHandler.currentMainPage;
     #endregion
 
     public override void Init()
@@ -41,6 +43,15 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
         WorldManager.Instance.RemoveObserver(this);
         base.Deinit();
     }
+
+    #region Control Page with OpenMode
+    public void OpenPage(PageType pageType, OpenMode openMode)
+    {
+        
+    }
+
+
+    #endregion
 
     public void OpenPage(PageType pageType)
     {
