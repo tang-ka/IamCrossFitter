@@ -27,14 +27,14 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     #region Page OpenMode Handler
     protected UIOpenHandler openHandler;
 
-    public List<UIPage> BackgroundPages => openHandler.openedBackgroundPageList;
-    public Stack<UIPage> PageStack => openHandler.openedPageStack;
-    public UIPage CurrentMainPage => openHandler.openedCurrentMainPage;
+    public List<PageType> BackgroundPages => openHandler.openedBackgroundPageList;
+    public Stack<PageType> PageStack => openHandler.openedPageStack;
+    public PageType HomePage => openHandler.home;
     #endregion
 
     public override void Init()
     {
-        openHandler = new UIOpenHandler(this, pageControllerList);
+        openHandler = new UIOpenHandler();
         WorldManager.Instance.AddObserver(this);
         base.Init();
     }
@@ -46,40 +46,32 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     }
 
     #region Control Page with OpenMode
-    public void OpenPage(PageType pageType, OpenMode openMode /*= OpenMode.Default*/)
+    public void RegisterHomePage(PageType pageType)
     {
-        var page = GetPage(pageType);
-        
-        switch (openMode)
-        {
-            case OpenMode.Background:
-                if (!openHandler.TryOpenBackgroundPage(page))
-                    return;
-                break;
-            case OpenMode.Default:
-                if (!openHandler.TryOpenMainPage(page))
-                    return;
-                break;
-            case OpenMode.Additive:
-                if (!openHandler.TryOpenAdditivePage(page))
-                    return;
-                break;
-            case OpenMode.OnlyWithBackground:
-                break;
-            case OpenMode.Only:
-                break;
-            default:
-                break;
-        }
+        openHandler.RegisterHomePage(pageType);
     }
+
+    public void OpenPage(PageType pageType, OpenMode openMode = OpenMode.Default)
+    {
+        openHandler.AllocatePageController(pageControllerList.Find((x) => x.IsPageAvailable(pageType)));
+
+        openHandler.OpenPage(pageType, openMode);
+    }
+
 
     #endregion
 
-    public void OpenPage(PageType pageType)
+    public void ClosePage(PageType pageType)
     {
-        openHandler.OpenPage(pageType);
+        var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+        openHandler.ClosePage(controller, pageType);
     }
 
+    //public void OpenPage(PageType pageType)
+    //{
+    //    var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+    //    openHandler.OpenPage(controller, pageType);
+    //}
 
     //public void OpenPage(PageType pageType)
     //{
@@ -94,19 +86,19 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     //    }
     //}
 
-    public void ClosePage(PageType pageType)
-    {
-        try
-        {
-            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+    //public void ClosePage(PageType pageType)
+    //{
+    //    try
+    //    {
+    //        var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
 
-            controller.ClosePage(pageType);
-        }
-        catch (NullReferenceException)
-        {
-            throw new NullReferenceException("The page can't be closed. because it is not available. Make sure the page is active.");
-        }
-    }
+    //        controller.ClosePage(pageType);
+    //    }
+    //    catch (NullReferenceException)
+    //    {
+    //        throw new NullReferenceException("The page can't be closed. because it is not available. Make sure the page is active.");
+    //    }
+    //}
 
     public UIPage GetPage(PageType pageType)
     {
@@ -144,7 +136,7 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
                 OpenPage(PageType.Loading); // OpenMode : Default
                 break;
             case MainState.Main:
-                OpenPage(PageType.SystemUI); // OpenMode : Background
+                OpenPage(PageType.SystemUI, OpenMode.Background); // OpenMode : Background
                 OpenPage(PageType.Dashboard); // OpenMode : Default
                 break;
             default:

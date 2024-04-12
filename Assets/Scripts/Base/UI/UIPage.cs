@@ -10,6 +10,8 @@ public class UIPage : UIBase
     List<UIPanel> myPanelList = new List<UIPanel>();
     [SerializeField] PageType pageType;
     public bool isStartPage = false;
+
+    public OpenMode openMode = OpenMode.None;
     #endregion
 
     #region Property
@@ -30,17 +32,19 @@ public class UIPage : UIBase
         pageType = (PageType)Enum.Parse(typeof(PageType), typeID);
     }
 
-    public virtual void Open() 
+    public virtual UIPage Open() 
     { 
         //Debug.Log($"Activate Page : {typeID}");
         Active(true);
+        return this;
     }
 
 
-    public virtual void Close() 
+    public virtual UIPage Close() 
     { 
         //Debug.Log($"Deactivate Page : {typeID}");
         Active(false);
+        return this;
     }
     #endregion
 

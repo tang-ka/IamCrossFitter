@@ -16,22 +16,14 @@ public class UIPageController : UIController
     #endregion
 
     #region Method
-    public virtual void OpenPage(PageType pageType)
+    public virtual UIPage OpenPage(PageType pageType)
     {
-        GetPage(pageType).Open();
-
-        //foreach (var page in pageDic.Values)
-        //{
-        //    if (page.isStartPage)
-        //        page.Open();
-        //    else
-        //        page.Close();
-        //}
+        return GetPage(pageType).Open();
     }
 
-    public virtual void ClosePage(PageType pageType)
+    public virtual UIPage ClosePage(PageType pageType)
     {
-        GetPage(pageType).Close();
+        return GetPage(pageType).Close();
     }
 
     private async void PageInit()
@@ -42,7 +34,10 @@ public class UIPageController : UIController
             pageDic.Add(page.TypeID, page);
 
             if (page.isStartPage)
+            {
+                UIManager.Instance.RegisterHomePage((PageType)Enum.Parse(typeof(PageType), page.TypeID));
                 page.Open();
+            }
             else
                 page.Close();
         }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum OpenMode
 {
+    None = -1,
     Background, 
     Default, 
     Additive, 
@@ -14,53 +15,78 @@ public enum OpenMode
 
 public class UIOpenHandler
 {
-    UIManager manager;
     UIPageController controller;
-    List<UIPageController> pageControllerList = new List<UIPageController>();
 
-    public List<UIPage> openedBackgroundPageList = new List<UIPage>();
+    public PageType home = PageType.None;
 
-    public Stack<UIPage> openedPageStack = new Stack<UIPage>();
-    public UIPage openedCurrentMainPage;
+    public List<PageType> openedBackgroundPageList = new List<PageType>();
+    public Stack<PageType> pageHistory = new Stack<PageType>(); 
 
-    public UIOpenHandler(UIManager manager, List<UIPageController> pageControllerList)
+    public PageType main = PageType.None;
+    public Stack<PageType> openedPageStack = new Stack<PageType>();
+
+    public void RegisterHomePage(PageType type)
     {
-        this.manager = manager;
-        this.pageControllerList = pageControllerList;
+        home = type;
     }
 
-    public void OpenPage(PageType pageType)
+    public void AllocatePageController(UIPageController controller)
     {
-        try
-        {
-            controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-            controller.OpenPage(pageType);
-        }
-        catch (NullReferenceException)
-        {
-            throw new NullReferenceException("The page can't be Opend. because it is not available. Make sure the page is active.");
-        }
+        if (controller != null)
+            this.controller = controller;
+        else
+            throw new NullReferenceException("The page is not available. Make sure the page is active.");
     }
 
-    public bool TryOpenBackgroundPage(UIPage page)
+    public void OpenPage(PageType type, OpenMode mode)
     {
+        switch (mode)
+        {
+            case OpenMode.None:
+                break;
+            case OpenMode.Background:
+                if (TryOpenBackgroundPage(type) == false) 
+                    return;
+                break;
+            case OpenMode.Default:
+                if (TryOpenMainPage(type) == false) 
+                    return;
+                break;
+            case OpenMode.Additive:
+                if (TryOpenAdditivePage(type) == false) 
+                    return;
+                break;
+            case OpenMode.OnlyWithBackground:
+                break;
+            case OpenMode.Only:
+                break;
+            default:
+                break;
+        }
+
+        var openedPage  = controller.OpenPage(type);
+        openedPage.openMode = mode;
+    }
+
+    public bool TryOpenBackgroundPage(PageType page)
+    {
+        // 이미 열려있다면
         if (IsRegisteredToOpenedList(page))
-            return false;
+            return false; // 요청 취소
 
-
-
+        // 아니라면
         openedBackgroundPageList.Add(page);
         return true;
     }
 
-    public bool TryOpenMainPage(UIPage page)
+    public bool TryOpenMainPage(PageType page)
     {
         if (IsRegisteredToOpenedList(page))
             return false;
 
-        if (openedCurrentMainPage == null)
+        if (openedPageStack.Count == 0)
         {
-            openedCurrentMainPage = page;
+
         }
         else
         {
@@ -70,22 +96,26 @@ public class UIOpenHandler
             // 그걸 여기서 처리할지 경고만 던질지 정해야 함.
         }
 
-
         openedPageStack.Clear();
         openedPageStack.Push(page);
         return true;
     }
 
-    public bool TryOpenAdditivePage(UIPage page)
+    public bool TryOpenAdditivePage(PageType page)
     {
         if (IsRegisteredToOpenedList(page))
             return false;
 
-        if (openedCurrentMainPage == null)
+        if (openedPageStack.Count == 0)
             Debug.LogWarning("The main page is not currently open, but an attempt was made to open an additional page.");
 
         openedPageStack.Push(page);
         return true;
+    }
+
+    public void ClosePage(UIPageController controller, PageType pageType)
+    {
+        controller.ClosePage(pageType);
     }
 
     public void CloseBackgroundPage(UIPage page)
@@ -100,7 +130,7 @@ public class UIOpenHandler
 
 
     // 어느 리스트에라도 등록이 돼 있다 -> 현재 열려있다. -> 열려있으면 Open명령 무시
-    public bool IsRegisteredToOpenedList(UIPage page)
+    public bool IsRegisteredToOpenedList(PageType page)
     {
         bool isRegistered = false;
 
