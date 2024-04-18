@@ -24,20 +24,20 @@ public class ResourceManager : ManagerBase<ResourceManager>
         }
         movementDic = db.GetMovementDataDic();
 
-        string log = "";
-        foreach (var movementType in movementTypeList)
-        {
-            log += movementType.ToString() + "\n";
-        }
-        Debug.Log(log);
+        //string log = "";
+        //foreach (var movementType in movementTypeList)
+        //{
+        //    log += movementType.ToString() + "\n";
+        //}
+        //Debug.Log(log);
 
-        string logDic = "";
-        foreach (var item in movementDic)
-        {
-            logDic += $"===={item.Key}====\n";
-            logDic += ListLog(item.Value) + "\n";
-        }
-        Debug.Log(logDic);
+        //string logDic = "";
+        //foreach (var item in movementDic)
+        //{
+        //    logDic += $"===={item.Key}====\n";
+        //    logDic += ListLog(item.Value) + "\n";
+        //}
+        //Debug.Log(logDic);
     }
 
     string ListLog(List<Movement> list)

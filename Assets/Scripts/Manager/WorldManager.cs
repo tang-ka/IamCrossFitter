@@ -54,7 +54,7 @@ public class WorldManager : ManagerWithStateSubject<WorldManager, MainState>
         await sceneHandler.LoadScene(value, LoadSceneMode.Additive,
             finishCallback: () =>
             {
-                Debug.Log("FinishCallback");
+                //Debug.Log("FinishCallback");
                 NotifyChangeState(value);
             });
     }

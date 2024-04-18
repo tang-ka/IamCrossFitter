@@ -33,13 +33,12 @@ public class UIPageController : UIController
             page.Init(this);
             pageDic.Add(page.TypeID, page);
 
-            if (page.isStartPage)
-            {
-                UIManager.Instance.RegisterHomePage((PageType)Enum.Parse(typeof(PageType), page.TypeID));
-                page.Open();
-            }
-            else
-                page.Close();
+            page.Close();
+
+            //if (page.isStartPage)
+            //    page.Open();
+            //else
+            //    page.Close();
         }
 
         await UniTask.WaitUntil(() =>

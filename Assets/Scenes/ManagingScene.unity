@@ -1858,6 +1858,7 @@ MonoBehaviour:
   isInit: 0
   pageType: 0
   isStartPage: 0
+  openMode: -1
 --- !u!1 &1506603592
 GameObject:
   m_ObjectHideFlags: 0
@@ -2711,3 +2712,4 @@ MonoBehaviour:
   isInit: 0
   pageType: 0
   isStartPage: 0
+  openMode: -1

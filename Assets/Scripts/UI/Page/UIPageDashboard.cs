@@ -10,4 +10,10 @@ public class UIPageDashboard : UIPage
 
         base.Init();
     }
+
+    public override UIPage Open()
+    {
+        Debug.Log("Opne DashBoard");
+        return base.Open();
+    }
 }
