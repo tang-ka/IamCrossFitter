@@ -318,8 +318,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 45484260}
+  - component: {fileID: 45484261}
   m_Layer: 0
-  m_Name: Page - RecordsManagement
+  m_Name: Page - RecordManagement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,6 +347,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &45484261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45484259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30bf551ca58d488468293f45771bb459, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeID: 
+  isInit: 0
+  pageType: 0
+  isStartPage: 0
+  openMode: -1
 --- !u!1001 &107653913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1852,7 +1870,7 @@ GameObject:
   - component: {fileID: 1004071094}
   - component: {fileID: 1004071093}
   m_Layer: 0
-  m_Name: btn_OpenRecordPanel
+  m_Name: btn_OpenRecordManagement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3386,6 +3404,7 @@ MonoBehaviour:
   listItemPool:
   - {fileID: 996864495}
   - {fileID: 107653914}
+  btnRecordManagement: {fileID: 1004071093}
 --- !u!1 &2110944285
 GameObject:
   m_ObjectHideFlags: 0

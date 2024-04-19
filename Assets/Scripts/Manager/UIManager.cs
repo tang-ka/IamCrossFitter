@@ -17,7 +17,7 @@ public enum PageType
     Loading,
 
     // Main Scene
-    Dashboard, MovementList, PersonalRecord
+    Dashboard, MovementList, RecordManagement
 
     // PersonalRecord Scene
 }
@@ -33,14 +33,28 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     public Stack<PageType> PageStack => openHandler.openedPageStack;
     public PageType HomePage => openHandler.home;
     #endregion
+
     [SerializeField] UIPageCycleController pageCycleController;
 
     public override void Init()
     {
-        pageCycleController = new UIPageCycleController(OpenPage, ClosePage);
+        //pageCycleController = new UIPageCycleController(OpenPage, ClosePage);
         openHandler = new UIOpenHandler();
         WorldManager.Instance.AddObserver(this);
         base.Init();
+
+        //void OpenPage(PageType pageType)
+        //{
+        //    try
+        //    {
+        //        var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+        //        controller.OpenPage(pageType);
+        //    }
+        //    catch (NullReferenceException)
+        //    {
+        //        throw new NullReferenceException("You can't get it. because it is not available. Make sure the page is active.");
+        //    }
+        //}
     }
 
     public override void Deinit()
@@ -52,26 +66,28 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     #region UIPageCycleController
     public void OpenPage(PageType pageType, PageCycleType cycleType)
     {
-        pageCycleController.OpenPage(pageType, cycleType);
-    }
+        pageCycleController.OpenPage(pageType, cycleType, OpenPage);
 
-    private void OpenPage(PageType pageType)
-    {
-        try
+        void OpenPage(PageType pageType)
         {
-            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-            controller.OpenPage(pageType);
+            try
+            {
+                var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+                controller.OpenPage(pageType);
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("You can't get it. because it is not available. Make sure the page is active.");
+            }
         }
-        catch (NullReferenceException)
-        {
-            throw new NullReferenceException("You can't get it. because it is not available. Make sure the page is active.");
-        }
-    }
+    }    
 
     public void ClosePage(PageType pageType)
     {
         var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-        openHandler.ClosePage(controller, pageType);
+        pageCycleController.ClosePage(pageType, _=> controller.ClosePage(pageType));
+
+        //openHandler.ClosePage(controller, pageType);
     }
 
     public void GoBackPage()
@@ -135,11 +151,14 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
             case MainState.None:
                 break;
             case MainState.Loading:
-                OpenPage(PageType.Loading); // OpenMode : Main
+                //OpenPage(PageType.Loading); // OpenMode : Main
+                OpenPage(PageType.Loading, PageCycleType.Home);
                 break;
             case MainState.Main:
-                OpenPage(PageType.SystemUI, OpenMode.Background); // OpenMode : Background
-                OpenPage(PageType.Dashboard, OpenMode.Home); // OpenMode : Home
+                //OpenPage(PageType.SystemUI, OpenMode.Background); // OpenMode : Background
+                //OpenPage(PageType.Dashboard, OpenMode.Home); // OpenMode : Home
+                OpenPage(PageType.SystemUI, PageCycleType.Background);
+                OpenPage(PageType.Dashboard, PageCycleType.Home);
                 break;
             default:
                 break;

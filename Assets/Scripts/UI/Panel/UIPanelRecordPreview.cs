@@ -3,16 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIPanelRecordPreview : DataListPanel<RecordListItem, MovementRecord>
 {
     [SerializeField] List<RecordListItem> listItemPool;
+    [SerializeField] Button btnRecordManagement;
 
     protected override void Init()
     {
         base.Init();
 
         (parentPage as UIPageMovementList).onSelectMovement += SetRecordPreview;
+
+        btnRecordManagement.onClick.AddListener(() => UIManager.Instance.OpenPage(PageType.RecordManagement, PageCycleType.Additive));
     }
 
     private void SetRecordPreview(Movement movement)
