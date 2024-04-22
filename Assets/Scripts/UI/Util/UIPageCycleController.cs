@@ -1,7 +1,10 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public enum PageCycleType
@@ -18,7 +21,7 @@ public class UIPageCycleController : MonoBehaviour
 {
     #region Members
     [SerializeField] PageType curHomePage = PageType.None;
-    [SerializeField] PageType curDisplayPage = PageType.None;
+    [SerializeField] PageType curDisplayPage => curOpenedPageStack.Peek();
     [SerializeField] PageType curBackPage = PageType.None;
 
     [SerializeField] List<PageType> backgroundPageList = new();
@@ -29,22 +32,17 @@ public class UIPageCycleController : MonoBehaviour
     [SerializeField] List<PageType> openedTest = new();
 
     Action<PageType> openAction;
-    Action<PageType> closeAction;
+    public Action<PageType> closeAction;
     #endregion
-
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            curOpenedPageStack.Clear();
+            print(curDisplayPage);
+        }
+    }
     #region Property
-    public PageType CurHomePage
-    {
-        get { return curHomePage; }
-        private set { curHomePage = value; }
-    }
-
-    public PageType CurDisplayPage
-    {
-        get { return curDisplayPage; }
-        private set { curDisplayPage = value; }
-    }
-
     public PageType CurBackPage
     {
         get { return curBackPage; }
@@ -52,19 +50,17 @@ public class UIPageCycleController : MonoBehaviour
     }
     #endregion
 
-    private void Awake()
-    {
-        
-    }
-
     //public UIPageCycleController(Action<PageType> openAction, Action<PageType> closeAction)
     //{
     //    this.openAction = openAction;
     //    this.closeAction = closeAction;
     //}
 
+    #region Method : Main (public)
     public void OpenPage(PageType pageType, PageCycleType cycleType, Action<PageType> openAction = null)
     {
+        (bool isPossible, Action onCompletePageOpen) result = (false, null);
+
         switch (cycleType)
         {
             case PageCycleType.None:
@@ -72,15 +68,20 @@ public class UIPageCycleController : MonoBehaviour
                 return;
 
             case PageCycleType.Background:
-                if (TryOpenBackgorundPage(pageType) == false) return;
+                if (TryOpenBackgroundPage(pageType) == false) return;
+
                 break;
 
             case PageCycleType.Home:
-                if (TryOpenHomePage(pageType) == false) return;
+                result = TryOpenHomePage(pageType);
+                if (!result.isPossible)
+                    return;
                 break;
 
             case PageCycleType.Main:
-                if (TryOpenMainPage(pageType) == false) return;
+                result = TryOpenMainPage(pageType);
+                if (!result.isPossible)
+                    return;
                 break;
 
             case PageCycleType.Additive:
@@ -95,12 +96,12 @@ public class UIPageCycleController : MonoBehaviour
             this.openAction?.Invoke(pageType);
         else
             openAction?.Invoke(pageType);
+
+        result.onCompletePageOpen?.Invoke();
     }
 
     public void ClosePage(PageType pageType, Action<PageType> closeAction = null)
     {
-
-
         if (closeAction == null)
             this.closeAction?.Invoke(pageType);
         else
@@ -111,10 +112,15 @@ public class UIPageCycleController : MonoBehaviour
 
     public void GoBack()
     {
+        if (curOpenedPageStack.Count == 0)
+        {
+            //OpenPage
+        }
         ClosePage(pageHistoryStack.Pop());
     }
+    #endregion
 
-    private bool TryOpenBackgorundPage(PageType pageType)
+    private bool TryOpenBackgroundPage(PageType pageType)
     {
         if (IsAlreadyOpened(pageType)) return false;
 
@@ -122,29 +128,40 @@ public class UIPageCycleController : MonoBehaviour
         return true;
     }
 
-    private bool TryOpenHomePage(PageType pageType)
+    private (bool isPossible, Action onCompletePageOpen) TryOpenHomePage(PageType pageType)
     {
-        if (IsAlreadyOpened(pageType)) return false;
+        if (IsAlreadyOpened(pageType)) return (false, null);
 
-        RegisterHomePage(pageType);
-        SetDisplayingPage(pageType);
-        return true;
+        CloseAllPage();
+
+        return (true, CompleteOpneHomePage);
+
+        void CompleteOpneHomePage()
+        {
+            RegisterHomePage(pageType);
+            SetDisplayingPage(pageType);
+        }
     }
 
-    private bool TryOpenMainPage(PageType pageType)
+    private (bool isPossible, Action onCompletePageOpen) TryOpenMainPage(PageType pageType)
     {
-        if (IsAlreadyOpened(pageType)) return false;
+        if (IsAlreadyOpened(pageType)) return (false, null);
 
-        curOpenedPageStack.Clear();
-        SetDisplayingPage(pageType);
+        CloseAllPage();
 
         pageHistoryStack.Push(curHomePage);
-        SetBackpage(curHomePage);
+        SetBackPage(curHomePage);
 
         historyTest = pageHistoryStack.ToList();
 
-        return true;
+        return (true, CompleteOpneHomePage);
+
+        void CompleteOpneHomePage()
+        {
+            SetDisplayingPage(pageType);
+        }
     }
+
     // 히스토리는 클로즈를 하면서 추가 하고
     // 오픈드페이지는 어디디티브로 열었을때 추가하고
     // 백을 누르면 오픈드 페이지 먼저 소모하고 히스토리 소모하는 방식으로
@@ -152,29 +169,39 @@ public class UIPageCycleController : MonoBehaviour
     {
         if (IsAlreadyOpened(pageType)) return false;
 
-        SetBackpage(curOpenedPageStack.Peek());
-
+        SetBackPage(curOpenedPageStack.Peek());
         SetDisplayingPage(pageType);
 
         return true;
     }
 
+    private void CloseAllPage()
+    {
+        int openedPageCount = curOpenedPageStack.Count;
+        for (int i = 0; i < openedPageCount; i++)
+        {
+            ClosePage(curOpenedPageStack.Pop());
+        }
+
+        PageStackReset();
+    }
+
     private void RegisterHomePage(PageType pageType)
     {
         PageStackReset();
-
-        CurHomePage = pageType;
+        curHomePage = pageType;
     }
 
     private void SetDisplayingPage(PageType pageType)
     {
-        CurDisplayPage = pageType;
-        curOpenedPageStack.Push(pageType);
+        if (curOpenedPageStack.Contains(pageType))
+            return;
 
+        curOpenedPageStack.Push(pageType);
         openedTest = curOpenedPageStack.ToList();
     }
 
-    private void SetBackpage(PageType pageType)
+    private void SetBackPage(PageType pageType)
     {
         CurBackPage = pageType;
     }
@@ -182,15 +209,6 @@ public class UIPageCycleController : MonoBehaviour
     bool IsAlreadyOpened(PageType pageType)
     {
         return curOpenedPageStack.Contains(pageType) || backgroundPageList.Contains(pageType);
-
-        //if (curOpenedPageStack != null && backgroundPageList != null)
-        //    return curOpenedPageStack.Contains(pageType) || backgroundPageList.Contains(pageType);
-        //else if (curOpenedPageStack == null && backgroundPageList != null)
-        //    return backgroundPageList.Contains(pageType);
-        //else if (curOpenedPageStack != null && backgroundPageList == null)
-        //    return curOpenedPageStack.Contains(pageType);        
-        //else
-        //    return true;
     }
 
     private void PageStackReset()

@@ -11,7 +11,7 @@ public class UIPage : UIBase
     [SerializeField] PageType pageType;
     public bool isStartPage = false;
 
-    public OpenMode openMode = OpenMode.None;
+    public PageCycleType cycleType = PageCycleType.None;
     #endregion
 
     #region Property

@@ -71,7 +71,6 @@ public class UIOpenHandler
         }
 
         var openedPage = controller.OpenPage(type);
-        openedPage.openMode = mode;
     }
 
     public bool TryOpenBackgroundPage(PageType page)

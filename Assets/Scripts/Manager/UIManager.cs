@@ -17,9 +17,12 @@ public enum PageType
     Loading,
 
     // Main Scene
-    Dashboard, MovementList, RecordManagement
+    Dashboard, MovementList, RecordManagement,
 
     // PersonalRecord Scene
+
+    //TempPage
+    Temp1, Temp2, Temp3
 }
 
 public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
@@ -38,10 +41,18 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
 
     public override void Init()
     {
+        pageCycleController.closeAction += ClosePage;
+
         //pageCycleController = new UIPageCycleController(OpenPage, ClosePage);
         openHandler = new UIOpenHandler();
         WorldManager.Instance.AddObserver(this);
         base.Init();
+
+         void ClosePage(PageType pageType)
+        {
+            var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+            controller?.ClosePage(pageType);
+        }
 
         //void OpenPage(PageType pageType)
         //{
@@ -73,6 +84,7 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
             try
             {
                 var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+                controller.GetPage(pageType).cycleType = cycleType;
                 controller.OpenPage(pageType);
             }
             catch (NullReferenceException)

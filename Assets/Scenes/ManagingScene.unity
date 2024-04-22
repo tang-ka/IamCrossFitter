@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 125038484}
   - component: {fileID: 125038483}
   m_Layer: 0
-  m_Name: btn_Temp1
+  m_Name: btn_GoTemp1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -510,7 +510,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curHomePage: 0
-  curDisplayPage: 0
   curBackPage: 0
   backgroundPageList: 
   historyTest: 
@@ -574,7 +573,7 @@ GameObject:
   - component: {fileID: 270130954}
   - component: {fileID: 270130953}
   m_Layer: 0
-  m_Name: btn_Temp3
+  m_Name: btn_GoTemp3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -858,10 +857,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeID: 
   isInit: 0
-  btnTemp1: {fileID: 125038483}
-  btnTemp2: {fileID: 1096081429}
-  btnTemp3: {fileID: 270130953}
-  btnTemp4: {fileID: 1528081747}
+  btnGoTemp1: {fileID: 125038483}
+  btnGoTemp2: {fileID: 1096081429}
+  btnGoTemp3: {fileID: 270130953}
+  btnGoMovementListPage: {fileID: 1528081747}
 --- !u!1 &500763558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1558,7 +1557,7 @@ GameObject:
   - component: {fileID: 1096081430}
   - component: {fileID: 1096081429}
   m_Layer: 0
-  m_Name: btn_Temp2
+  m_Name: btn_GoTemp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1878,7 +1877,7 @@ MonoBehaviour:
   isInit: 0
   pageType: 0
   isStartPage: 0
-  openMode: -1
+  cycleType: -1
 --- !u!1 &1506603592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1972,7 +1971,7 @@ GameObject:
   - component: {fileID: 1528081748}
   - component: {fileID: 1528081747}
   m_Layer: 0
-  m_Name: btn_Temp4
+  m_Name: btn_GoMovementList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2732,4 +2731,4 @@ MonoBehaviour:
   isInit: 0
   pageType: 0
   isStartPage: 0
-  openMode: -1
+  cycleType: -1
