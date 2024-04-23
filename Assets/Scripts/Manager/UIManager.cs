@@ -29,43 +29,36 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
 {
     [SerializeField] List<UIPageController> pageControllerList = new List<UIPageController>();
 
-    #region Page OpenMode Handler
-    protected UIOpenHandler openHandler;
-
-    public List<PageType> BackgroundPages => openHandler.openedBackgroundPageList;
-    public Stack<PageType> PageStack => openHandler.openedPageStack;
-    public PageType HomePage => openHandler.home;
-    #endregion
-
     [SerializeField] UIPageCycleController pageCycleController;
 
     public override void Init()
     {
-        pageCycleController.closeAction += ClosePage;
+        pageCycleController.closeAction += CloseAction;
+        pageCycleController.openAction += OpenAction;
 
-        //pageCycleController = new UIPageCycleController(OpenPage, ClosePage);
-        openHandler = new UIOpenHandler();
+        //pageCycleController = new UIPageCycleController(OpenAction, ClosePage);
+
         WorldManager.Instance.AddObserver(this);
         base.Init();
 
-         void ClosePage(PageType pageType)
+         void CloseAction(PageType pageType)
         {
             var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
             controller?.ClosePage(pageType);
         }
 
-        //void OpenPage(PageType pageType)
-        //{
-        //    try
-        //    {
-        //        var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-        //        controller.OpenPage(pageType);
-        //    }
-        //    catch (NullReferenceException)
-        //    {
-        //        throw new NullReferenceException("You can't get it. because it is not available. Make sure the page is active.");
-        //    }
-        //}
+        void OpenAction(PageType pageType)
+        {
+            try
+            {
+                var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
+                controller.OpenPage(pageType);
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("You can't get it. because it is not available. Make sure the page is active.");
+            }
+        }
     }
 
     public override void Deinit()
@@ -77,9 +70,9 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     #region UIPageCycleController
     public void OpenPage(PageType pageType, PageCycleType cycleType)
     {
-        pageCycleController.OpenPage(pageType, cycleType, OpenPage);
+        pageCycleController.OpenPage(pageType, cycleType, OpenAction);
 
-        void OpenPage(PageType pageType)
+        void OpenAction(PageType pageType)
         {
             try
             {
@@ -98,8 +91,6 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
     {
         var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
         pageCycleController.ClosePage(pageType, _=> controller.ClosePage(pageType));
-
-        //openHandler.ClosePage(controller, pageType);
     }
 
     public void GoBackPage()
@@ -107,27 +98,11 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
         pageCycleController.GoBack();
     }
 
-    #endregion
-
-    #region Control Page with OpenMode
-    public void RegisterHomePage(PageType pageType)
+    public bool IsNowHome()
     {
-        openHandler.RegisterHomePage(pageType);
+        return pageCycleController.curDisplayPage == pageCycleController.curHomePage;
     }
-
-    public void OpenPage(PageType pageType, OpenMode openMode = OpenMode.Main)
-    {
-        openHandler.AllocatePageController(pageControllerList.Find((x) => x.IsPageAvailable(pageType)));
-        openHandler.OpenPage(pageType, openMode);
-    }
-
     #endregion
-
-    //public void ClosePage(PageType pageType)
-    //{
-    //    var controller = pageControllerList.Find((x) => x.IsPageAvailable(pageType));
-    //    openHandler.ClosePage(controller, pageType);
-    //}
 
     public UIPage GetPage(PageType pageType)
     {
@@ -163,12 +138,9 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
             case MainState.None:
                 break;
             case MainState.Loading:
-                //OpenPage(PageType.Loading); // OpenMode : Main
                 OpenPage(PageType.Loading, PageCycleType.Home);
                 break;
             case MainState.Main:
-                //OpenPage(PageType.SystemUI, OpenMode.Background); // OpenMode : Background
-                //OpenPage(PageType.Dashboard, OpenMode.Home); // OpenMode : Home
                 OpenPage(PageType.SystemUI, PageCycleType.Background);
                 OpenPage(PageType.Dashboard, PageCycleType.Home);
                 break;
@@ -177,40 +149,6 @@ public class UIManager : ManagerBase<UIManager>, IStateObserver<MainState>
         }
     } 
     #endregion
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            string log = $"Home : {openHandler.home}\n";
-            Debug.Log(log);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            string log = "==== Background Page ====\n";
-            log += ListLog(openHandler.openedBackgroundPageList);
-            Debug.Log(log);
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            string log = $"Main : {openHandler.main}";
-            Debug.Log(log);
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            string log = "==== Page History ====\n";
-
-            log += ListLog(openHandler.pageHistory.ToList<PageType>());
-            Debug.Log(log);
-        }
-        else if (Input.GetKeyDown(KeyCode.T))
-        {
-            string log = "==== Opened Page Stack ====\n";
-
-            log += ListLog(openHandler.openedPageStack.ToList<PageType>());
-            Debug.Log(log);
-        }
-    }
 
     string ListLog(List<PageType> list)
     {

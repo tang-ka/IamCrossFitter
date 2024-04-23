@@ -20,9 +20,19 @@ public enum PageCycleType
 public class UIPageCycleController : MonoBehaviour
 {
     #region Members
-    [SerializeField] PageType curHomePage = PageType.None;
-    [SerializeField] PageType curDisplayPage => curOpenedPageStack.Peek();
-    [SerializeField] PageType curBackPage = PageType.None;
+    public PageType curHomePage = PageType.None;
+    public PageType curDisplayPage
+    {
+        get
+        {
+            if (curOpenedPageStack.Count == 0)
+                return PageType.None;
+
+            return curOpenedPageStack.Peek();
+        }
+    }
+
+    public PageType curBackPage = PageType.None;
 
     [SerializeField] List<PageType> backgroundPageList = new();
     Stack<PageType> pageHistoryStack = new Stack<PageType>() { };
@@ -31,17 +41,10 @@ public class UIPageCycleController : MonoBehaviour
     [SerializeField] List<PageType> historyTest = new();
     [SerializeField] List<PageType> openedTest = new();
 
-    Action<PageType> openAction;
+    public Action<PageType> openAction;
     public Action<PageType> closeAction;
     #endregion
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            curOpenedPageStack.Clear();
-            print(curDisplayPage);
-        }
-    }
+
     #region Property
     public PageType CurBackPage
     {
@@ -57,15 +60,15 @@ public class UIPageCycleController : MonoBehaviour
     //}
 
     #region Method : Main (public)
-    public void OpenPage(PageType pageType, PageCycleType cycleType, Action<PageType> openAction = null)
+    public void OpenPage(PageType pageType, PageCycleType cycleType = PageCycleType.None, Action<PageType> openAction = null)
     {
         (bool isPossible, Action onCompletePageOpen) result = (false, null);
 
         switch (cycleType)
         {
             case PageCycleType.None:
-                Debug.LogWarning($"requested cycleType is None. Please check cycleType of {pageType}.");
-                return;
+                //Debug.LogWarning($"requested cycleType is None. Please check cycleType of {pageType}.");
+                break;
 
             case PageCycleType.Background:
                 if (TryOpenBackgroundPage(pageType) == false) return;
@@ -112,11 +115,24 @@ public class UIPageCycleController : MonoBehaviour
 
     public void GoBack()
     {
-        if (curOpenedPageStack.Count == 0)
+        if (curDisplayPage == curHomePage)
+            return;
+
+        if (curOpenedPageStack.Count != 0)
         {
-            //OpenPage
+            ClosePage(curOpenedPageStack.Pop());
+            openedTest = curOpenedPageStack.ToList();
         }
-        ClosePage(pageHistoryStack.Pop());
+        
+        if (curOpenedPageStack.Count == 0)
+        {            
+            if (pageHistoryStack.Count > 0)
+            {
+                var pageToOpen = pageHistoryStack.Pop();
+                OpenPage(pageToOpen);
+                SetDisplayingPage(pageToOpen);
+            }
+        }
     }
     #endregion
 
@@ -162,9 +178,6 @@ public class UIPageCycleController : MonoBehaviour
         }
     }
 
-    // 히스토리는 클로즈를 하면서 추가 하고
-    // 오픈드페이지는 어디디티브로 열었을때 추가하고
-    // 백을 누르면 오픈드 페이지 먼저 소모하고 히스토리 소모하는 방식으로
     private bool TryOpenAdditivePage(PageType pageType)
     {
         if (IsAlreadyOpened(pageType)) return false;

@@ -12,10 +12,10 @@ public class UIPanelSystemUITopButton : UIPanel
 
     protected override void Init()
     {
-        btnBack.onClick.AddListener(() => WorldManager.Instance.ReturnToPreState());
+        btnBack.onClick.AddListener(OnClickBack);
         btnSetting.onClick.AddListener(async () =>
         {
-            UIManager.Instance.OpenPage(PageType.Setting);
+            UIManager.Instance.OpenPage(PageType.Setting, PageCycleType.Additive);
             await UniTask.Delay(1500);
             UIManager.Instance.ClosePage(PageType.Setting);
         });
@@ -30,7 +30,13 @@ public class UIPanelSystemUITopButton : UIPanel
 
     public void OnClickBack()
     {
-
+        if (WorldManager.Instance.CurMainState == MainState.Main)
+        {
+            if (!UIManager.Instance.IsNowHome())
+                UIManager.Instance.GoBackPage();
+            else
+                WorldManager.Instance.ReturnToPreState();
+        }
     }
 
     public override void Activate()
